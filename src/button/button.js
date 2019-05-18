@@ -16,7 +16,6 @@
  */
 goog.require('goog.events.EventType');
 goog.require('goog.dom.TagName');
-goog.require('componentHandler');
 
 
 /**
@@ -104,10 +103,10 @@ MaterialButton.prototype.enable = function() {
 
 // The component registers itself. It can assume componentHandler is available
 // in the global scope.
-componentHandler.register({
-  constructor: MaterialButton,
-  classAsString: 'MaterialButton',
-  cssClass: MaterialButtonClasses_.JS_BUTTON,
-  widget: true
-});
+// componentHandler.register({
+//   constructor: MaterialButton,
+//   classAsString: 'MaterialButton',
+//   cssClass: MaterialButtonClasses_.JS_BUTTON,
+//   widget: true
+// });
 
