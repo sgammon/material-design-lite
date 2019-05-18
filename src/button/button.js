@@ -63,9 +63,9 @@ const MaterialButton = function MaterialButton(element) {
   // Initialize instance.
   if (this.element_) {
     if (this.element_.classList.contains(MaterialButtonClasses_.RIPPLE_EFFECT)) {
-      var rippleContainer = document.createElement(goog.dom.TagName.SPAN);
+      var rippleContainer = document.createElement(goog.dom.TagName.SPAN.toString());
       rippleContainer.classList.add(MaterialButtonClasses_.RIPPLE_CONTAINER);
-      this.rippleElement_ = document.createElement(goog.dom.TagName.SPAN);
+      this.rippleElement_ = document.createElement(goog.dom.TagName.SPAN.toString());
       this.rippleElement_.classList.add(MaterialButtonClasses_.RIPPLE);
       rippleContainer.appendChild(this.rippleElement_);
       this.boundRippleBlurHandler = this.blurHandler_.bind(this);
