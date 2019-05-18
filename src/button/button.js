@@ -23,7 +23,7 @@ goog.require('goog.dom.TagName');
  * @enum {string | number}
  * @private
  */
-MaterialButtonConstant_ = {
+const MaterialButtonConstant_ = {
   // None for now.
 };
 
@@ -35,7 +35,7 @@ MaterialButtonConstant_ = {
  * @enum {string}
  * @private
  */
-MaterialButtonClasses_ = {
+const MaterialButtonClasses_ = {
   RIPPLE_EFFECT: goog.getCssName('mdl-js-ripple-effect'),
   RIPPLE_CONTAINER: goog.getCssName('mdl-button__ripple-container'),
   RIPPLE: goog.getCssName('mdl-ripple'),
@@ -50,7 +50,7 @@ MaterialButtonClasses_ = {
  * @constructor
  * @param {!HTMLElement} element The element that will be upgraded.
  */
-var MaterialButton = function MaterialButton(element) {
+const MaterialButton = function MaterialButton(element) {
   /**
    * Element that will be upgraded.
    *
