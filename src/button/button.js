@@ -17,15 +17,6 @@
 goog.require('goog.events.EventType');
 goog.require('goog.dom.TagName');
 
-/**
- * Store constants in one place so they can be updated easily.
- *
- * @enum {string | number}
- * @private
- */
-const MaterialButtonConstant_ = {
-  // None for now.
-};
 
 /**
  * Store strings for class names defined by this component that are used in
@@ -98,7 +89,7 @@ MaterialButton.prototype.blurHandler_ = function(event) {
  * @public
  */
 MaterialButton.prototype.disable = function() {
-  this.element_.disabled = true;
+  this.element_.setAttribute('disabled', 'disabled');
 };
 
 /**
@@ -107,7 +98,7 @@ MaterialButton.prototype.disable = function() {
  * @public
  */
 MaterialButton.prototype.enable = function() {
-  this.element_.disabled = false;
+  this.element_.removeAttribute('disabled');
 };
 
 // The component registers itself. It can assume componentHandler is available
