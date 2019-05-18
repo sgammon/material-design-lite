@@ -22,6 +22,7 @@
  * @author Jason Mayes.
  */
 /* exported componentHandler */
+goog.provide('componentHandler.register');
 
 // Pre-defining the componentHandler interface, for closure documentation and
 // static verification.
