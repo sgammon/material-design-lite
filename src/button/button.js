@@ -16,6 +16,7 @@
  */
 goog.require('goog.events.EventType');
 goog.require('goog.dom.TagName');
+goog.require('componentHandler.register');
 
 
 /**
