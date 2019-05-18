@@ -72,7 +72,7 @@ const MaterialButton = function MaterialButton(element) {
 /**
  * Handle blur of element.
  *
- * @param {Event} event The event that fired.
+ * @param {!Event} event The event that fired.
  * @private
  */
 MaterialButton.prototype.blurHandler_ = function(event) {
