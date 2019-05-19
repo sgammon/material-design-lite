@@ -17,6 +17,8 @@
 
 goog.require('goog.events.EventType');
 
+goog.provide('material.MaterialRipple');
+
 
 /**
  * Store constants in one place so they can be updated easily.
