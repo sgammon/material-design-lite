@@ -130,96 +130,95 @@ material.MaterialRipple = function MaterialRipple(element) {
   this.element_.addEventListener(goog.events.EventType.TOUCHSTART,
       this.boundDownHandler);
 
-    this.boundUpHandler = this.upHandler_.bind(this);
-    this.element_.addEventListener(goog.events.EventType.MOUSEUP, this.boundUpHandler);
-    this.element_.addEventListener(goog.events.EventType.MOUSELEAVE, this.boundUpHandler);
-    this.element_.addEventListener(goog.events.EventType.TOUCHEND, this.boundUpHandler);
-    this.element_.addEventListener(goog.events.EventType.BLUR, this.boundUpHandler);
+  this.boundUpHandler = this.upHandler_.bind(this);
+  this.element_.addEventListener(goog.events.EventType.MOUSEUP, this.boundUpHandler);
+  this.element_.addEventListener(goog.events.EventType.MOUSELEAVE, this.boundUpHandler);
+  this.element_.addEventListener(goog.events.EventType.TOUCHEND, this.boundUpHandler);
+  this.element_.addEventListener(goog.events.EventType.BLUR, this.boundUpHandler);
 
-    /**
-     * Getter for frameCount_.
-     * @return {number} the frame count.
-     */
-    this.getFrameCount = function() {
-      return this.frameCount_;
-    };
+  /**
+   * Getter for frameCount_.
+   * @return {number} the frame count.
+   */
+  this.getFrameCount = function() {
+    return this.frameCount_;
+  };
 
-    /**
-     * Setter for frameCount_.
-     *
-     * @param {number} fC the frame count.
-     */
-    this.setFrameCount = function(fC) {
-      this.frameCount_ = fC;
-    };
+  /**
+   * Setter for frameCount_.
+   *
+   * @param {number} fC the frame count.
+   */
+  this.setFrameCount = function(fC) {
+    this.frameCount_ = fC;
+  };
 
-    /**
-     * Getter for rippleElement_.
-     *
-     * @return {!HTMLSpanElement} the ripple element.
-     */
-    this.getRippleElement = function() {
-      return this.rippleElement_;
-    };
+  /**
+   * Getter for rippleElement_.
+   *
+   * @return {!HTMLSpanElement} the ripple element.
+   */
+  this.getRippleElement = function() {
+    return this.rippleElement_;
+  };
 
-    /**
-     * Sets the ripple X and Y coordinates.
-     *
-     * @param  {number} newX the new X coordinate
-     * @param  {number} newY the new Y coordinate
-     */
-    this.setRippleXY = function(newX, newY) {
-      this.x_ = newX;
-      this.y_ = newY;
-    };
+  /**
+   * Sets the ripple X and Y coordinates.
+   *
+   * @param  {number} newX the new X coordinate
+   * @param  {number} newY the new Y coordinate
+   */
+  this.setRippleXY = function(newX, newY) {
+    this.x_ = newX;
+    this.y_ = newY;
+  };
 
-    /**
-     * Sets the ripple styles.
-     *
-     * @param  {boolean} start whether or not this is the start frame.
-     */
-    this.setRippleStyles = function(start) {
-      if (this.rippleElement_ !== null) {
-        var transformString;
-        var scale;
-        var offset = 'translate(' + this.x_ + 'px, ' + this.y_ + 'px)';
+  /**
+   * Sets the ripple styles.
+   *
+   * @param  {boolean} start whether or not this is the start frame.
+   */
+  this.setRippleStyles = function(start) {
+    if (this.rippleElement_ !== null) {
+      var transformString;
+      var scale;
+      var offset = 'translate(' + this.x_ + 'px, ' + this.y_ + 'px)';
 
-        if (start) {
-          scale = MaterialRippleConstant_.INITIAL_SCALE;
-          size = MaterialRippleConstant_.INITIAL_SIZE;
-        } else {
-          scale = MaterialRippleConstant_.FINAL_SCALE;
-          if (recentering) {
-            offset = 'translate(' + this.boundWidth / 2 + 'px, ' +
-              this.boundHeight / 2 + 'px)';
-          }
-        }
-
-        transformString = 'translate(-50%, -50%) ' + offset + scale;
-
-        this.rippleElement_.style.webkitTransform = transformString;
-        this.rippleElement_.style.msTransform = transformString;
-        this.rippleElement_.style.transform = transformString;
-
-        if (start) {
-          this.rippleElement_.classList.remove(MaterialRippleClasses_.IS_ANIMATING);
-        } else {
-          this.rippleElement_.classList.add(MaterialRippleClasses_.IS_ANIMATING);
-        }
-      }
-    };
-
-    /**
-     * Handles an animation frame.
-     */
-    this.animFrameHandler = function() {
-      if (this.frameCount_-- > 0) {
-        window.requestAnimationFrame(this.animFrameHandler.bind(this));
+      if (start) {
+        scale = MaterialRippleConstant_.INITIAL_SCALE;
+        size = MaterialRippleConstant_.INITIAL_SIZE;
       } else {
-        this.setRippleStyles(false);
+        scale = MaterialRippleConstant_.FINAL_SCALE;
+        if (recentering) {
+          offset = 'translate(' + this.boundWidth / 2 + 'px, ' +
+            this.boundHeight / 2 + 'px)';
+        }
       }
-    };
-  }
+
+      transformString = 'translate(-50%, -50%) ' + offset + scale;
+
+      this.rippleElement_.style.webkitTransform = transformString;
+      this.rippleElement_.style.msTransform = transformString;
+      this.rippleElement_.style.transform = transformString;
+
+      if (start) {
+        this.rippleElement_.classList.remove(MaterialRippleClasses_.IS_ANIMATING);
+      } else {
+        this.rippleElement_.classList.add(MaterialRippleClasses_.IS_ANIMATING);
+      }
+    }
+  };
+
+  /**
+   * Handles an animation frame.
+   */
+  this.animFrameHandler = function() {
+    if (this.frameCount_-- > 0) {
+      window.requestAnimationFrame(this.animFrameHandler.bind(this));
+    } else {
+      this.setRippleStyles(false);
+    }
+  };
 };
 
 /**
