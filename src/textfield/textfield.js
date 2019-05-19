@@ -79,6 +79,64 @@ const MaterialTextfield = function MaterialTextfield(element) {
    * @type {number}
    */
   this.maxRows = NO_MAX_ROWS_;
+
+  /**
+   * Attaches the label element for this text field.
+   *
+   * @const
+   * @private
+   * @type {!HTMLElement}
+   */
+  this.label_ = this.element_.querySelector('.' + MaterialTextfieldClasses_.LABEL);
+
+  /**
+   * Attaches the input form field for this text field.
+   *
+   * @const
+   * @private
+   * @type {!HTMLInputElement}
+   */
+  this.input_ = this.element_.querySelector('.' + MaterialTextfieldClasses_.INPUT);
+
+  if (this.input_) {
+    if (this.input_.hasAttribute(MAX_ROWS_ATTRIBUTE_)) {
+      const parsedMaxRows = parseInt(this.input_.getAttribute(MAX_ROWS_ATTRIBUTE_), 10);
+      if (!isNaN(parsedMaxRows)) {
+        this.maxRows = parsedMaxRows;
+      }
+    }
+
+    if (this.input_.hasAttribute('placeholder')) {
+      this.element_.classList.add(MaterialTextfieldClasses_.HAS_PLACEHOLDER);
+    }
+
+    this.boundUpdateClassesHandler = this.updateClasses_.bind(this);
+    this.boundFocusHandler = this.onFocus_.bind(this);
+    this.boundBlurHandler = this.onBlur_.bind(this);
+    this.boundResetHandler = this.onReset_.bind(this);
+    this.input_.addEventListener(goog.events.EventType.INPUT, this.boundUpdateClassesHandler);
+    this.input_.addEventListener(goog.events.EventType.FOCUS, this.boundFocusHandler);
+    this.input_.addEventListener(goog.events.EventType.BLUR, this.boundBlurHandler);
+    this.input_.addEventListener(goog.events.EventType.RESET, this.boundResetHandler);
+
+    if (this.maxRows !== NO_MAX_ROWS_) {
+      // TODO: This should handle pasting multi line text.
+      // Currently doesn't.
+      this.boundKeyDownHandler = this.onKeyDown_.bind(this);
+      this.input_.addEventListener(goog.events.EventType.KEYDOWN, this.boundKeyDownHandler);
+    }
+    const invalid = this.element_.classList
+      .contains(MaterialTextfieldClasses_.IS_INVALID);
+    this.updateClasses_();
+    this.element_.classList.add(MaterialTextfieldClasses_.IS_UPGRADED);
+    if (invalid) {
+      this.element_.classList.add(MaterialTextfieldClasses_.IS_INVALID);
+    }
+    if (this.input_.hasAttribute('autofocus')) {
+      this.element_.focus();
+      this.checkFocus();
+    }
+  }
 };
 
 /**
@@ -151,7 +209,7 @@ MaterialTextfield.prototype.updateClasses_ = function() {
  * @public
  */
 MaterialTextfield.prototype.checkDisabled = function() {
-  if (this.input_.disabled) {
+  if (this.input_.hasAttribute('disabled')) {
     this.element_.classList.add(MaterialTextfieldClasses_.IS_DISABLED);
   } else {
     this.element_.classList.remove(MaterialTextfieldClasses_.IS_DISABLED);
@@ -232,63 +290,3 @@ MaterialTextfield.prototype.change = function(value) {
   this.input_.setAttribute(value || '');
   this.updateClasses_();
 };
-
-/**
- * Initialize element.
- */
-MaterialTextfield.prototype.init = function() {
-
-  if (this.element_) {
-    this.label_ = this.element_.querySelector('.' + MaterialTextfieldClasses_.LABEL);
-    this.input_ = this.element_.querySelector('.' + MaterialTextfieldClasses_.INPUT);
-
-    if (this.input_) {
-      if (this.input_.hasAttribute(MAX_ROWS_ATTRIBUTE_)) {
-        this.maxRows = parseInt(this.input_.getAttribute(MAX_ROWS_ATTRIBUTE_), 10);
-        if (isNaN(this.maxRows)) {
-          this.maxRows = NO_MAX_ROWS_;
-        }
-      }
-
-      if (this.input_.hasAttribute('placeholder')) {
-        this.element_.classList.add(MaterialTextfieldClasses_.HAS_PLACEHOLDER);
-      }
-
-      this.boundUpdateClassesHandler = this.updateClasses_.bind(this);
-      this.boundFocusHandler = this.onFocus_.bind(this);
-      this.boundBlurHandler = this.onBlur_.bind(this);
-      this.boundResetHandler = this.onReset_.bind(this);
-      this.input_.addEventListener(goog.events.EventType.INPUT, this.boundUpdateClassesHandler);
-      this.input_.addEventListener(goog.events.EventType.FOCUS, this.boundFocusHandler);
-      this.input_.addEventListener(goog.events.EventType.BLUR, this.boundBlurHandler);
-      this.input_.addEventListener(goog.events.EventType.RESET, this.boundResetHandler);
-
-      if (this.maxRows !== NO_MAX_ROWS_) {
-        // TODO: This should handle pasting multi line text.
-        // Currently doesn't.
-        this.boundKeyDownHandler = this.onKeyDown_.bind(this);
-        this.input_.addEventListener(goog.events.EventType.KEYDOWN, this.boundKeyDownHandler);
-      }
-      var invalid = this.element_.classList
-        .contains(MaterialTextfieldClasses_.IS_INVALID);
-      this.updateClasses_();
-      this.element_.classList.add(MaterialTextfieldClasses_.IS_UPGRADED);
-      if (invalid) {
-        this.element_.classList.add(MaterialTextfieldClasses_.IS_INVALID);
-      }
-      if (this.input_.hasAttribute('autofocus')) {
-        this.element_.focus();
-        this.checkFocus();
-      }
-    }
-  }
-};
-
-// The component registers itself. It can assume componentHandler is available
-// in the global scope.
-// componentHandler.register({
-//   constructor: MaterialTextfield,
-//   classAsString: 'MaterialTextfield',
-//   cssClass: 'mdl-js-textfield',
-//   widget: true
-// });
