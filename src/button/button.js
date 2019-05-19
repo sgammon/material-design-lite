@@ -44,7 +44,7 @@ const MaterialButtonClasses_ = {
  * @constructor
  * @param {!HTMLElement} element The element that will be upgraded.
  */
-const MaterialButton = function MaterialButton(element) {
+material.MaterialButton = function MaterialButton(element) {
   /**
    * Element that will be upgraded.
    *
@@ -110,7 +110,7 @@ const MaterialButton = function MaterialButton(element) {
  * @param {!Event} event The event that fired.
  * @private
  */
-MaterialButton.prototype.blurHandler_ = function(event) {
+material.MaterialButton.prototype.blurHandler_ = function(event) {
   if (event) {
     this.element_.blur();
   }
@@ -123,7 +123,7 @@ MaterialButton.prototype.blurHandler_ = function(event) {
  *
  * @public
  */
-MaterialButton.prototype.disable = function() {
+material.MaterialButton.prototype.disable = function() {
   this.element_.setAttribute('disabled', 'disabled');
 };
 
@@ -132,9 +132,6 @@ MaterialButton.prototype.disable = function() {
  *
  * @public
  */
-MaterialButton.prototype.enable = function() {
+material.MaterialButton.prototype.enable = function() {
   this.element_.removeAttribute('disabled');
 };
-
-// Export
-material.MaterialButton = MaterialButton;
