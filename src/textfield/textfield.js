@@ -88,10 +88,15 @@ const MaterialTextfield = function MaterialTextfield(element) {
  * @private
  */
 MaterialTextfield.prototype.onKeyDown_ = function(event) {
-  var currentRowCount = event.target.value.split('\n').length;
-  if (event.keyCode === 13) {
-    if (currentRowCount >= NO_MAX_ROWS_) {
-      event.preventDefault();
+  const inputEl = /** @type {!HTMLInputField} */ (event.target);
+  const fieldValue = /** @type {?string} */ (inputEl.value);
+  if (fieldValue) {
+    const currentRowCount = /** @type {number} */ (inputEl.value.split('\n').length);
+    const pressedKey = /** @type {number} */ (event.keyCode);
+    if (pressedKey === 13) {
+      if (currentRowCount >= NO_MAX_ROWS_) {
+        event.preventDefault();
+      }
     }
   }
 };
