@@ -186,7 +186,6 @@ material.MaterialRipple = function MaterialRipple(element) {
 
       if (start) {
         scale = MaterialRippleConstant_.INITIAL_SCALE;
-        size = MaterialRippleConstant_.INITIAL_SIZE;
       } else {
         scale = MaterialRippleConstant_.FINAL_SCALE;
         if (recentering) {
