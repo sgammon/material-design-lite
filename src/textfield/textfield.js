@@ -88,7 +88,7 @@ const MaterialTextfield = function MaterialTextfield(element) {
  * @private
  */
 MaterialTextfield.prototype.onKeyDown_ = function(event) {
-  const inputEl = /** @type {!HTMLInputField} */ (event.target);
+  const inputEl = /** @type {!HTMLInputElement} */ (event.target);
   const fieldValue = /** @type {?string} */ (inputEl.value);
   if (fieldValue) {
     const currentRowCount = /** @type {number} */ (inputEl.value.split('\n').length);
