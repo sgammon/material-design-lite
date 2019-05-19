@@ -81,22 +81,14 @@ const MaterialTextfield = function MaterialTextfield(element) {
   this.maxRows = NO_MAX_ROWS_;
 
   /**
-   * Attaches the label element for this text field.
-   *
-   * @const
-   * @private
-   * @type {!HTMLElement}
-   */
-  this.label_ = this.element_.querySelector('.' + MaterialTextfieldClasses_.LABEL);
-
-  /**
    * Attaches the input form field for this text field.
    *
    * @const
    * @private
    * @type {!HTMLInputElement}
    */
-  this.input_ = this.element_.querySelector('.' + MaterialTextfieldClasses_.INPUT);
+  this.input_ = /** @type {!HTMLInputElement} */ (
+    this.element_.querySelector('.' + MaterialTextfieldClasses_.INPUT));
 
   if (this.input_) {
     if (this.input_.hasAttribute(MAX_ROWS_ATTRIBUTE_)) {
@@ -287,6 +279,6 @@ MaterialTextfield.prototype.enable = function() {
  * @public
  */
 MaterialTextfield.prototype.change = function(value) {
-  this.input_.setAttribute(value || '');
+  this.input_.setAttribute('value', value || '');
   this.updateClasses_();
 };
