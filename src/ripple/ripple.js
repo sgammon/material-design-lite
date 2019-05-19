@@ -68,12 +68,18 @@ material.MaterialRipple = function MaterialRipple(element) {
    */
   this.element_ = element;
 
-  var recentering =
+  const rect = this.element_.getBoundingClientRect();
+  const recentering =
       this.element_.classList.contains(MaterialRippleClasses_.RIPPLE_CENTER);
-  if (!this.element_.classList.contains(
-      MaterialRippleClasses_.RIPPLE_EFFECT_IGNORE_EVENTS)) {
-    
-  this.rippleElement_ = this.element_.querySelector('.' +
+
+  /**
+   * Defines the ripple element, which will constitute the inner ripple.
+   *
+   * @private
+   * @type {?HTMLElement}
+   */
+  this.rippleElement_ = this.element_.classList.contains(
+      MaterialRippleClasses_.RIPPLE_EFFECT_IGNORE_EVENTS) ? null : this.element_.querySelector('.' +
       MaterialRippleClasses_.RIPPLE);
 
   /**
@@ -87,6 +93,19 @@ material.MaterialRipple = function MaterialRipple(element) {
    * @type {number}
    */
   this.rippleSize_ = 0;
+
+  /**
+   * @private
+   * @type {number}
+   */
+  this.boundHeight = rect.height;
+
+  /**
+   * @private
+   * @type {number}
+   */
+  this.boundWidth = rect.width;
+
 
   /**
    * @private
@@ -137,7 +156,7 @@ material.MaterialRipple = function MaterialRipple(element) {
     /**
      * Getter for rippleElement_.
      *
-     * @return {Element} the ripple element.
+     * @return {!HTMLSpanElement} the ripple element.
      */
     this.getRippleElement = function() {
       return this.rippleElement_;
@@ -163,7 +182,6 @@ material.MaterialRipple = function MaterialRipple(element) {
       if (this.rippleElement_ !== null) {
         var transformString;
         var scale;
-        var size;
         var offset = 'translate(' + this.x_ + 'px, ' + this.y_ + 'px)';
 
         if (start) {
@@ -171,7 +189,6 @@ material.MaterialRipple = function MaterialRipple(element) {
           size = MaterialRippleConstant_.INITIAL_SIZE;
         } else {
           scale = MaterialRippleConstant_.FINAL_SCALE;
-          size = this.rippleSize_ + 'px';
           if (recentering) {
             offset = 'translate(' + this.boundWidth / 2 + 'px, ' +
               this.boundHeight / 2 + 'px)';
