@@ -41,11 +41,11 @@ const MaterialRippleConstant_ = {
  * @private
  */
 const MaterialRippleClasses_ = {
-  RIPPLE_CENTER: 'mdl-ripple--center',
-  RIPPLE_EFFECT_IGNORE_EVENTS: 'mdl-js-ripple-effect--ignore-events',
-  RIPPLE: 'mdl-ripple',
-  IS_ANIMATING: 'is-animating',
-  IS_VISIBLE: 'is-visible'
+  RIPPLE_CENTER: goog.getCssName('mdl-ripple--center'),
+  RIPPLE_EFFECT_IGNORE_EVENTS: goog.getCssName('mdl-js-ripple-effect--ignore-events'),
+  RIPPLE: goog.getCssName('mdl-ripple'),
+  IS_ANIMATING: goog.getCssName('is-animating'),
+  IS_VISIBLE: goog.getCssName('is-visible')
 };
 
 /**
@@ -70,48 +70,49 @@ const MaterialRipple = function MaterialRipple(element) {
       this.element_.classList.contains(MaterialRippleClasses_.RIPPLE_CENTER);
   if (!this.element_.classList.contains(
       MaterialRippleClasses_.RIPPLE_EFFECT_IGNORE_EVENTS)) {
-    this.rippleElement_ = this.element_.querySelector('.' +
-        MaterialRippleClasses_.RIPPLE);
+    
+  this.rippleElement_ = this.element_.querySelector('.' +
+      MaterialRippleClasses_.RIPPLE);
 
-    /**
-     * @private
-     * @type {number}
-     */
-    this.frameCount_ = 0;
+  /**
+   * @private
+   * @type {number}
+   */
+  this.frameCount_ = 0;
 
-    /**
-     * @private
-     * @type {number}
-     */
-    this.rippleSize_ = 0;
+  /**
+   * @private
+   * @type {number}
+   */
+  this.rippleSize_ = 0;
 
-    /**
-     * @private
-     * @type {number}
-     */
-    this.x_ = 0;
-    this.y_ = 0;
+  /**
+   * @private
+   * @type {number}
+   */
+  this.x_ = 0;
+  this.y_ = 0;
 
-    /**
-     * Touch start produces a compat mouse down event, which would cause a
-     * second ripples. To avoid that, we use this property to ignore the first
-     * mouse down after a touch start.
-     *
-     * @type {!boolean}
-     */
-    this.ignoringMouseDown_ = false;
+  /**
+   * Touch start produces a compat mouse down event, which would cause a
+   * second ripples. To avoid that, we use this property to ignore the first
+   * mouse down after a touch start.
+   *
+   * @type {!boolean}
+   */
+  this.ignoringMouseDown_ = false;
 
-    this.boundDownHandler = this.downHandler_.bind(this);
-    this.element_.addEventListener('mousedown',
+  this.boundDownHandler = this.downHandler_.bind(this);
+  this.element_.addEventListener(goog.events.EventType.MOUSEDOWN,
+    this.boundDownHandler);
+  this.element_.addEventListener(goog.events.EventType.TOUCHSTART,
       this.boundDownHandler);
-    this.element_.addEventListener('touchstart',
-        this.boundDownHandler);
 
     this.boundUpHandler = this.upHandler_.bind(this);
-    this.element_.addEventListener('mouseup', this.boundUpHandler);
-    this.element_.addEventListener('mouseleave', this.boundUpHandler);
-    this.element_.addEventListener('touchend', this.boundUpHandler);
-    this.element_.addEventListener('blur', this.boundUpHandler);
+    this.element_.addEventListener(goog.events.EventType.MOUSEUP, this.boundUpHandler);
+    this.element_.addEventListener(goog.events.EventType.MOUSELEAVE, this.boundUpHandler);
+    this.element_.addEventListener(goog.events.EventType.TOUCHEND, this.boundUpHandler);
+    this.element_.addEventListener(goog.events.EventType.BLUR, this.boundUpHandler);
 
     /**
      * Getter for frameCount_.
