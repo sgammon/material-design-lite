@@ -84,7 +84,7 @@ const MaterialTextfield = function MaterialTextfield(element) {
 /**
  * Handle input being entered.
  *
- * @param {Event} event The event that fired.
+ * @param {!Event} event The event that fired.
  * @private
  */
 MaterialTextfield.prototype.onKeyDown_ = function(event) {
@@ -99,7 +99,7 @@ MaterialTextfield.prototype.onKeyDown_ = function(event) {
 /**
  * Handle focus.
  *
- * @param {Event} event The event that fired.
+ * @param {!Event} event The event that fired.
  * @private
  */
 MaterialTextfield.prototype.onFocus_ = function(event) {
@@ -109,7 +109,7 @@ MaterialTextfield.prototype.onFocus_ = function(event) {
 /**
  * Handle lost focus.
  *
- * @param {Event} event The event that fired.
+ * @param {!Event} event The event that fired.
  * @private
  */
 MaterialTextfield.prototype.onBlur_ = function(event) {
@@ -119,7 +119,7 @@ MaterialTextfield.prototype.onBlur_ = function(event) {
 /**
  * Handle reset event from out side.
  *
- * @param {Event} event The event that fired.
+ * @param {!Event} event The event that fired.
  * @private
  */
 MaterialTextfield.prototype.onReset_ = function(event) {
