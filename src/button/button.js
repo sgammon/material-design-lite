@@ -58,8 +58,10 @@ const MaterialButton = function MaterialButton(element) {
   // to facilitate the ripple, and instantiate the JavaScript object
   // that manages the ripple.
   if (this.element_.classList.contains(MaterialButtonClasses_.RIPPLE_EFFECT)) {
-    const rippleContainer = document.createElement(goog.dom.TagName.SPAN.toString());
-    const rippleElement = document.createElement(goog.dom.TagName.SPAN.toString());
+    const rippleContainer = /** @type {!HTMLSpanElement} */ (
+        document.createElement(goog.dom.TagName.SPAN.toString()));
+    const rippleElement = /** @type {!HTMLSpanElement} */ (
+      document.createElement(goog.dom.TagName.SPAN.toString()));
 
     /**
      * Ripple effect container element.
