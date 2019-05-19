@@ -271,3 +271,6 @@ MaterialRipple.prototype.upHandler_ = function(event) {
     }.bind(this), 0);
   }
 };
+
+// Export
+material.MaterialRipple = MaterialRipple;
