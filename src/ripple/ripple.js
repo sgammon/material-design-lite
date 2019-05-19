@@ -100,6 +100,7 @@ const MaterialRipple = function MaterialRipple(element) {
    * second ripples. To avoid that, we use this property to ignore the first
    * mouse down after a touch start.
    *
+   * @private
    * @type {!boolean}
    */
   this.ignoringMouseDown_ = false;
