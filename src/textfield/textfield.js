@@ -15,19 +15,25 @@
  * limitations under the License.
  */
 goog.require('goog.events.EventType');
-goog.require('goog.dom.TagName');
 
 
 /**
- * Store constants in one place so they can be updated easily.
+ * Sentinel value for no limit on rows in the text field.
  *
- * @enum {string | number}
+ * @const
  * @private
+ * @type {!number}
  */
-const MaterialTextfieldConstant_ = {
-  NO_MAX_ROWS: -1,
-  MAX_ROWS_ATTRIBUTE: 'maxrows'
-};
+const NO_MAX_ROWS_ = -1;
+
+/**
+ * Name of the attribute to look for on a text field to define the limit of rows.
+ *
+ * @const
+ * @private
+ * @type {!string}
+ */
+const MAX_ROWS_ATTRIBUTE_ = 'maxrows';
 
 /**
  * Store strings for class names defined by this component that are used in
@@ -72,7 +78,7 @@ const MaterialTextfield = function MaterialTextfield(element) {
    * @public
    * @type {number}
    */
-  this.maxRows = MaterialTextfieldConstant_.NO_MAX_ROWS;
+  this.maxRows = NO_MAX_ROWS_;
 };
 
 /**
@@ -84,7 +90,7 @@ const MaterialTextfield = function MaterialTextfield(element) {
 MaterialTextfield.prototype.onKeyDown_ = function(event) {
   var currentRowCount = event.target.value.split('\n').length;
   if (event.keyCode === 13) {
-    if (currentRowCount >= MaterialTextfieldConstant_.NO_MAX_ROWS) {
+    if (currentRowCount >= NO_MAX_ROWS_) {
       event.preventDefault();
     }
   }
@@ -232,12 +238,10 @@ MaterialTextfield.prototype.init = function() {
     this.input_ = this.element_.querySelector('.' + MaterialTextfieldClasses_.INPUT);
 
     if (this.input_) {
-      if (this.input_.hasAttribute(
-            /** @type {string} */ (MaterialTextfieldConstant_.MAX_ROWS_ATTRIBUTE))) {
-        this.maxRows = parseInt(this.input_.getAttribute(
-            /** @type {string} */ (MaterialTextfieldConstant_.MAX_ROWS_ATTRIBUTE)), 10);
+      if (this.input_.hasAttribute(MAX_ROWS_ATTRIBUTE_)) {
+        this.maxRows = parseInt(this.input_.getAttribute(MAX_ROWS_ATTRIBUTE_), 10);
         if (isNaN(this.maxRows)) {
-          this.maxRows = MaterialTextfieldConstant_.NO_MAX_ROWS;
+          this.maxRows = NO_MAX_ROWS_;
         }
       }
 
@@ -254,7 +258,7 @@ MaterialTextfield.prototype.init = function() {
       this.input_.addEventListener(goog.events.EventType.BLUR, this.boundBlurHandler);
       this.input_.addEventListener(goog.events.EventType.RESET, this.boundResetHandler);
 
-      if (this.maxRows !== MaterialTextfieldConstant_.NO_MAX_ROWS) {
+      if (this.maxRows !== NO_MAX_ROWS_) {
         // TODO: This should handle pasting multi line text.
         // Currently doesn't.
         this.boundKeyDownHandler = this.onKeyDown_.bind(this);
