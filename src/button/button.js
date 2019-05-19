@@ -54,22 +54,52 @@ const MaterialButton = function MaterialButton(element) {
    */
   this.element_ = element;
 
-  // Initialize instance.
-  if (this.element_) {
-    if (this.element_.classList.contains(MaterialButtonClasses_.RIPPLE_EFFECT)) {
-      var rippleContainer = document.createElement(goog.dom.TagName.SPAN.toString());
-      rippleContainer.classList.add(MaterialButtonClasses_.RIPPLE_CONTAINER);
-      this.rippleElement_ = document.createElement(goog.dom.TagName.SPAN.toString());
-      this.rippleElement_.classList.add(MaterialButtonClasses_.RIPPLE);
-      rippleContainer.appendChild(this.rippleElement_);
-      this.boundRippleBlurHandler = this.blurHandler_.bind(this);
-      this.rippleElement_.addEventListener(goog.events.EventType.MOUSEUP, this.boundRippleBlurHandler);
-      this.element_.appendChild(rippleContainer);
-    }
-    this.boundButtonBlurHandler = this.blurHandler_.bind(this);
-    this.element_.addEventListener(goog.events.EventType.MOUSEUP, this.boundButtonBlurHandler);
-    this.element_.addEventListener(goog.events.EventType.MOUSELEAVE, this.boundButtonBlurHandler);
+  // if it's annotated with a ripple-effect class, add the container
+  // to facilitate the ripple, and instantiate the JavaScript object
+  // that manages the ripple.
+  if (this.element_.classList.contains(MaterialButtonClasses_.RIPPLE_EFFECT)) {
+    const rippleContainer = document.createElement(goog.dom.TagName.SPAN.toString());
+    const rippleElement = document.createElement(goog.dom.TagName.SPAN.toString());
+
+    /**
+     * Ripple effect container element.
+     *
+     * @const
+     * @private
+     * @type {!HTMLSpanElement}
+     */
+    this.rippleContainer_ = rippleContainer;
+
+    /**
+     * Ripple effect inner element.
+     *
+     * @const
+     * @private
+     * @type {!HTMLSpanElement}
+     */
+    this.rippleElement_ = rippleElement;
+
+    /**
+     * References the JavaScript ripple animation code, which is attached to the ripple
+     * container and applies the effect via the inner element.
+     *
+     * @const
+     * @private
+     * @type {!material.MaterialRipple}
+     */
+    this.rippleEffect_ = new material.MaterialRipple(rippleContainer);
+
+    rippleContainer.classList.add(MaterialButtonClasses_.RIPPLE_CONTAINER);
+    rippleElement.classList.add(MaterialButtonClasses_.RIPPLE);
+    rippleContainer.appendChild(this.rippleElement_);
+
+    this.boundRippleBlurHandler = this.blurHandler_.bind(this);
+    this.rippleElement_.addEventListener(goog.events.EventType.MOUSEUP, this.boundRippleBlurHandler);
+    this.element_.appendChild(rippleContainer);
   }
+  this.boundButtonBlurHandler = this.blurHandler_.bind(this);
+  this.element_.addEventListener(goog.events.EventType.MOUSEUP, this.boundButtonBlurHandler);
+  this.element_.addEventListener(goog.events.EventType.MOUSELEAVE, this.boundButtonBlurHandler);
 };
 
 /**
