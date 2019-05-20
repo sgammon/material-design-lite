@@ -15,6 +15,7 @@
  */
 
 /* Typography */
+$typoLineHeight: false;
 
 @mixin typo-preferred-font($usePreferred: true) {
   @if $usePreferred {
@@ -96,7 +97,9 @@
   @include typo-preferred-font($usePreferred);
   font-size: 16px;
   font-weight: 400;
-  line-height: 24px;
+  @if $typoLineHeight {
+    line-height: 24px;
+  }
   letter-spacing: 0.04em;
 
   @if $colorContrast {
@@ -136,7 +139,9 @@
   @include typo-preferred-font($usePreferred);
   font-size: 14px;
   font-weight: 400;
-  line-height: 24px;
+  @if $typoLineHeight {
+    line-height: 24px;
+  }
   letter-spacing: 0;
 
   @if $colorContrast {
