@@ -15,6 +15,8 @@
  * limitations under the License.
  */
 
+/* global goog */
+
 goog.require('goog.events.EventType');
 
 goog.provide('material.MaterialRipple');
@@ -75,12 +77,13 @@ material.MaterialRipple = function MaterialRipple(element) {
   /**
    * Defines the ripple element, which will constitute the inner ripple.
    *
+   * @const
    * @private
    * @type {?HTMLElement}
    */
   this.rippleElement_ = this.element_.classList.contains(
-      MaterialRippleClasses_.RIPPLE_EFFECT_IGNORE_EVENTS) ? null : this.element_.querySelector('.' +
-      MaterialRippleClasses_.RIPPLE);
+      MaterialRippleClasses_.RIPPLE_EFFECT_IGNORE_EVENTS) ? null : /** @type {!HTMLElement} */ (
+        this.element_.querySelector('.' + MaterialRippleClasses_.RIPPLE));
 
   /**
    * @private
@@ -126,15 +129,19 @@ material.MaterialRipple = function MaterialRipple(element) {
 
   this.boundDownHandler = this.downHandler_.bind(this);
   this.element_.addEventListener(goog.events.EventType.MOUSEDOWN,
-    this.boundDownHandler);
+    /** @type {function(!Event): void} */ (this.boundDownHandler));
   this.element_.addEventListener(goog.events.EventType.TOUCHSTART,
-      this.boundDownHandler);
+    /** @type {function(!Event): void} */ (this.boundDownHandler));
 
   this.boundUpHandler = this.upHandler_.bind(this);
-  this.element_.addEventListener(goog.events.EventType.MOUSEUP, this.boundUpHandler);
-  this.element_.addEventListener(goog.events.EventType.MOUSELEAVE, this.boundUpHandler);
-  this.element_.addEventListener(goog.events.EventType.TOUCHEND, this.boundUpHandler);
-  this.element_.addEventListener(goog.events.EventType.BLUR, this.boundUpHandler);
+  this.element_.addEventListener(goog.events.EventType.MOUSEUP,
+    /** @type {function(!Event): void} */ (this.boundUpHandler));
+  this.element_.addEventListener(goog.events.EventType.MOUSELEAVE,
+    /** @type {function(!Event): void} */ ((this.boundUpHandler)));
+  this.element_.addEventListener(goog.events.EventType.TOUCHEND,
+    /** @type {function(!Event): void} */ (this.boundUpHandler));
+  this.element_.addEventListener(goog.events.EventType.BLUR,
+    /** @type {function(!Event): void} */ (this.boundUpHandler));
 
   /**
    * Getter for frameCount_.
@@ -156,7 +163,7 @@ material.MaterialRipple = function MaterialRipple(element) {
   /**
    * Getter for rippleElement_.
    *
-   * @return {!HTMLSpanElement} the ripple element.
+   * @return {?HTMLElement} the ripple element.
    */
   this.getRippleElement = function() {
     return this.rippleElement_;
@@ -224,11 +231,11 @@ material.MaterialRipple = function MaterialRipple(element) {
  * Handle mouse / finger down on element.
  *
  * @private
- * @param {!Event} event The event that fired.
+ * @param {!MouseEvent|!TouchEvent} event The event that fired.
  */
 material.MaterialRipple.prototype.downHandler_ = function(event) {
   if (!this.rippleElement_.style.width && !this.rippleElement_.style.height) {
-    var rect = this.element_.getBoundingClientRect();
+    const rect = this.element_.getBoundingClientRect();
     this.boundHeight = rect.height;
     this.boundWidth = rect.width;
     this.rippleSize_ = Math.sqrt(rect.width * rect.width +
@@ -245,27 +252,30 @@ material.MaterialRipple.prototype.downHandler_ = function(event) {
     if (event.type === goog.events.EventType.TOUCHSTART) {
       this.ignoringMouseDown_ = true;
     }
-    var frameCount = this.getFrameCount();
+    const frameCount = this.getFrameCount();
     if (frameCount > 0) {
       return;
     }
     this.setFrameCount(1);
-    var bound = event.currentTarget.getBoundingClientRect();
-    var x;
-    var y;
-    // Check if we are handling a keyboard click.
-    if (event.clientX === 0 && event.clientY === 0) {
-      x = Math.round(bound.width / 2);
-      y = Math.round(bound.height / 2);
-    } else {
-      var clientX = event.clientX !== undefined ? event.clientX : event.touches[0].clientX;
-      var clientY = event.clientY !== undefined ? event.clientY : event.touches[0].clientY;
-      x = Math.round(clientX - bound.left);
-      y = Math.round(clientY - bound.top);
+    const target = /** @type {!HTMLElement} */ (event.currentTarget);
+    if (target) {
+      const bound = /** @type {!DOMRect} */ (target.getBoundingClientRect());
+      let x;
+      let y;
+      // Check if we are handling a keyboard click.
+      if (event.clientX === 0 && event.clientY === 0) {
+        x = Math.round(bound.width / 2);
+        y = Math.round(bound.height / 2);
+      } else {
+        const clientX = event.clientX !== undefined ? event.clientX : event.touches[0].clientX;
+        const clientY = event.clientY !== undefined ? event.clientY : event.touches[0].clientY;
+        x = Math.round(clientX - bound.left);
+        y = Math.round(clientY - bound.top);
+      }
+      this.setRippleXY(x, y);
+      this.setRippleStyles(true);
+      window.requestAnimationFrame(this.animFrameHandler.bind(this));
     }
-    this.setRippleXY(x, y);
-    this.setRippleStyles(true);
-    window.requestAnimationFrame(this.animFrameHandler.bind(this));
   }
 };
 
@@ -273,7 +283,7 @@ material.MaterialRipple.prototype.downHandler_ = function(event) {
  * Handle mouse / finger up on element.
  *
  * @private
- * @param {!Event} event The event that fired.
+ * @param {!MouseEvent|!TouchEvent} event The event that fired.
  */
 material.MaterialRipple.prototype.upHandler_ = function(event) {
   // Don't fire for the artificial "mouseup" generated by a double-click.

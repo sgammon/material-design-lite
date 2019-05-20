@@ -63,14 +63,13 @@ material.MaterialButton = function MaterialButton(element) {
     const rippleElement = /** @type {!HTMLSpanElement} */ (
       document.createElement(goog.dom.TagName.SPAN.toString()));
 
-    /**
-     * Ripple effect container element.
-     *
-     * @const
-     * @private
-     * @type {!HTMLSpanElement}
-     */
-    this.rippleContainer_ = rippleContainer;
+    rippleContainer.classList.add(MaterialButtonClasses_.RIPPLE_CONTAINER);
+    rippleElement.classList.add(MaterialButtonClasses_.RIPPLE);
+    rippleContainer.appendChild(rippleElement);
+
+    this.boundRippleBlurHandler = this.blurHandler_.bind(this);
+    rippleElement.addEventListener(goog.events.EventType.MOUSEUP, this.boundRippleBlurHandler);
+    this.element_.appendChild(rippleContainer);
 
     /**
      * Ripple effect inner element.
@@ -82,6 +81,15 @@ material.MaterialButton = function MaterialButton(element) {
     this.rippleElement_ = rippleElement;
 
     /**
+     * Ripple effect container element.
+     *
+     * @const
+     * @private
+     * @type {!HTMLSpanElement}
+     */
+    this.rippleContainer_ = rippleContainer;
+
+    /**
      * References the JavaScript ripple animation code, which is attached to the ripple
      * container and applies the effect via the inner element.
      *
@@ -90,14 +98,6 @@ material.MaterialButton = function MaterialButton(element) {
      * @type {!material.MaterialRipple}
      */
     this.rippleEffect_ = new material.MaterialRipple(rippleContainer);
-
-    rippleContainer.classList.add(MaterialButtonClasses_.RIPPLE_CONTAINER);
-    rippleElement.classList.add(MaterialButtonClasses_.RIPPLE);
-    rippleContainer.appendChild(this.rippleElement_);
-
-    this.boundRippleBlurHandler = this.blurHandler_.bind(this);
-    this.rippleElement_.addEventListener(goog.events.EventType.MOUSEUP, this.boundRippleBlurHandler);
-    this.element_.appendChild(rippleContainer);
   }
   this.boundButtonBlurHandler = this.blurHandler_.bind(this);
   this.element_.addEventListener(goog.events.EventType.MOUSEUP, this.boundButtonBlurHandler);
