@@ -119,9 +119,11 @@ $typoLineHeight: false;
   }
 }
 
-@mixin typo-body-2($colorContrast: false, $usePreferred: false) {
+@mixin typo-body-2($colorContrast: false, $usePreferred: false, $typoSize: true) {
   @include typo-preferred-font($usePreferred);
-  font-size: 14px;
+  @if $typoSize {
+    font-size: 14px;
+  }
   @if $usePreferred {
     font-weight: 500;
   } @else {
@@ -210,11 +212,13 @@ $typoLineHeight: false;
   }
 }
 
-@mixin typo-icon() {
+@mixin typo-icon($typoSize: true) {
   font-family: 'Material Icons';
   font-weight: normal;
   font-style: normal;
-  font-size: 24px;
+  @if $typoSize {
+    font-size: 24px;
+  }
   line-height: 1;
   letter-spacing: normal;
   text-transform: none;
