@@ -14,140 +14,126 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-(function() {
-  'use strict';
 
+/* global goog */
+
+goog.require('goog.events.EventType');
+
+goog.provide('material.MaterialTooltip');
+
+
+/**
+ * Store strings for class names defined by this component that are used in
+ * JavaScript. This allows us to simply change it in one place should we
+ * decide to modify at a later date.
+ *
+ * @enum {string}
+ * @private
+ */
+const MaterialTooltipCssClasses_ = {
+  IS_ACTIVE: goog.getCssName('is-active'),
+  BOTTOM: goog.getCssName('mdl-tooltip--bottom'),
+  LEFT: goog.getCssName('mdl-tooltip--left'),
+  RIGHT: goog.getCssName('mdl-tooltip--right'),
+  TOP: goog.getCssName('mdl-tooltip--top')
+};
+
+/**
+ * Class constructor for Tooltip MDL component.
+ * Implements MDL component design pattern defined at:
+ * https://github.com/jasonmayes/mdl-component-design-pattern
+ *
+ * @constructor
+ * @param {!HTMLElement} element The element that will be upgraded.
+ */
+material.MaterialTooltip = function MaterialTooltip(element) {
   /**
-   * Class constructor for Tooltip MDL component.
-   * Implements MDL component design pattern defined at:
-   * https://github.com/jasonmayes/mdl-component-design-pattern
+   * HTML element to root this tooltip to.
    *
-   * @constructor
-   * @param {HTMLElement} element The element that will be upgraded.
-   */
-  var MaterialTooltip = function MaterialTooltip(element) {
-    this.element_ = element;
-
-    // Initialize instance.
-    this.init();
-  };
-  window['MaterialTooltip'] = MaterialTooltip;
-
-  /**
-   * Store constants in one place so they can be updated easily.
-   *
-   * @enum {string | number}
+   * @const
    * @private
+   * @type {!HTMLElement}
    */
-  MaterialTooltip.prototype.Constant_ = {
-    // None for now.
-  };
+  this.element_ = element;
+
+  const forElId = this.element_.getAttribute('for') ||
+    this.element_.getAttribute('data-mdl-for');
 
   /**
-   * Store strings for class names defined by this component that are used in
-   * JavaScript. This allows us to simply change it in one place should we
-   * decide to modify at a later date.
+   * Stores the element for which this tooltip is providing UI.
    *
-   * @enum {string}
+   * @const
    * @private
+   * @type {?HTMLElement}
    */
-  MaterialTooltip.prototype.CssClasses_ = {
-    IS_ACTIVE: 'is-active',
-    BOTTOM: 'mdl-tooltip--bottom',
-    LEFT: 'mdl-tooltip--left',
-    RIGHT: 'mdl-tooltip--right',
-    TOP: 'mdl-tooltip--top'
-  };
+  this.forElement_ = forElId ? document.getElementById(forElId) : null;
 
-  /**
-   * Handle mouseenter for tooltip.
-   *
-   * @param {Event} event The event that fired.
-   * @private
-   */
-  MaterialTooltip.prototype.handleMouseEnter_ = function(event) {
-    var props = event.target.getBoundingClientRect();
-    var left = props.left + (props.width / 2);
-    var top = props.top + (props.height / 2);
-    var marginLeft = -1 * (this.element_.offsetWidth / 2);
-    var marginTop = -1 * (this.element_.offsetHeight / 2);
+  if (this.forElement_) {
+    // It's left here because it prevents accidental text selection on Android
+    if (!this.forElement_.hasAttribute('tabindex')) {
+      this.forElement_.setAttribute('tabindex', '0');
+    }
 
-    if (this.element_.classList.contains(this.CssClasses_.LEFT) || this.element_.classList.contains(this.CssClasses_.RIGHT)) {
-      left = (props.width / 2);
-      if (top + marginTop < 0) {
-        this.element_.style.top = '0';
-        this.element_.style.marginTop = '0';
-      } else {
-        this.element_.style.top = top + 'px';
-        this.element_.style.marginTop = marginTop + 'px';
-      }
+    this.boundMouseEnterHandler = this.handleMouseEnter_.bind(this);
+    this.boundMouseLeaveAndScrollHandler = this.hideTooltip_.bind(this);
+    this.forElement_.addEventListener(goog.events.EventType.MOUSEENTER, this.boundMouseEnterHandler, false);
+    this.forElement_.addEventListener(goog.events.EventType.TOUCHEND, this.boundMouseEnterHandler, false);
+    this.forElement_.addEventListener(goog.events.EventType.MOUSELEAVE, this.boundMouseLeaveAndScrollHandler, false);
+    window.addEventListener(goog.events.EventType.SCROLL, this.boundMouseLeaveAndScrollHandler, true);
+    window.addEventListener(goog.events.EventType.TOUCHSTART, this.boundMouseLeaveAndScrollHandler);
+  }
+};
+
+/**
+ * Handle mouseenter for tooltip.
+ *
+ * @param {Event} event The event that fired.
+ * @private
+ */
+material.MaterialTooltip.prototype.handleMouseEnter_ = function(event) {
+  const props = event.target.getBoundingClientRect();
+  const left = props.left + (props.width / 2);
+  const top = props.top + (props.height / 2);
+  const marginLeft = -1 * (this.element_.offsetWidth / 2);
+  const marginTop = -1 * (this.element_.offsetHeight / 2);
+
+  if (this.element_.classList.contains(MaterialTooltipCssClasses_.LEFT) ||
+      this.element_.classList.contains(MaterialTooltipCssClasses_.RIGHT)) {
+    if (top + marginTop < 0) {
+      this.element_.style.top = '0';
+      this.element_.style.marginTop = '0';
     } else {
-      if (left + marginLeft < 0) {
-        this.element_.style.left = '0';
-        this.element_.style.marginLeft = '0';
-      } else {
-        this.element_.style.left = left + 'px';
-        this.element_.style.marginLeft = marginLeft + 'px';
-      }
+      this.element_.style.top = top + 'px';
+      this.element_.style.marginTop = marginTop + 'px';
     }
-
-    if (this.element_.classList.contains(this.CssClasses_.TOP)) {
-      this.element_.style.top = props.top - this.element_.offsetHeight - 10 + 'px';
-    } else if (this.element_.classList.contains(this.CssClasses_.RIGHT)) {
-      this.element_.style.left = props.left + props.width + 10 + 'px';
-    } else if (this.element_.classList.contains(this.CssClasses_.LEFT)) {
-      this.element_.style.left = props.left - this.element_.offsetWidth - 10 + 'px';
+  } else {
+    if (left + marginLeft < 0) {
+      this.element_.style.left = '0';
+      this.element_.style.marginLeft = '0';
     } else {
-      this.element_.style.top = props.top + props.height + 10 + 'px';
+      this.element_.style.left = left + 'px';
+      this.element_.style.marginLeft = marginLeft + 'px';
     }
+  }
 
-    this.element_.classList.add(this.CssClasses_.IS_ACTIVE);
-  };
+  if (this.element_.classList.contains(MaterialTooltipCssClasses_.TOP)) {
+    this.element_.style.top = props.top - this.element_.offsetHeight - 10 + 'px';
+  } else if (this.element_.classList.contains(MaterialTooltipCssClasses_.RIGHT)) {
+    this.element_.style.left = props.left + props.width + 10 + 'px';
+  } else if (this.element_.classList.contains(MaterialTooltipCssClasses_.LEFT)) {
+    this.element_.style.left = props.left - this.element_.offsetWidth - 10 + 'px';
+  } else {
+    this.element_.style.top = props.top + props.height + 10 + 'px';
+  }
 
-  /**
-   * Hide tooltip on mouseleave or scroll
-   *
-   * @private
-   */
-  MaterialTooltip.prototype.hideTooltip_ = function() {
-    this.element_.classList.remove(this.CssClasses_.IS_ACTIVE);
-  };
+  this.element_.classList.add(MaterialTooltipCssClasses_.IS_ACTIVE);
+};
 
-  /**
-   * Initialize element.
-   */
-  MaterialTooltip.prototype.init = function() {
-
-    if (this.element_) {
-      var forElId = this.element_.getAttribute('for') ||
-          this.element_.getAttribute('data-mdl-for');
-
-      if (forElId) {
-        this.forElement_ = document.getElementById(forElId);
-      }
-
-      if (this.forElement_) {
-        // It's left here because it prevents accidental text selection on Android
-        if (!this.forElement_.hasAttribute('tabindex')) {
-          this.forElement_.setAttribute('tabindex', '0');
-        }
-
-        this.boundMouseEnterHandler = this.handleMouseEnter_.bind(this);
-        this.boundMouseLeaveAndScrollHandler = this.hideTooltip_.bind(this);
-        this.forElement_.addEventListener('mouseenter', this.boundMouseEnterHandler, false);
-        this.forElement_.addEventListener('touchend', this.boundMouseEnterHandler, false);
-        this.forElement_.addEventListener('mouseleave', this.boundMouseLeaveAndScrollHandler, false);
-        window.addEventListener('scroll', this.boundMouseLeaveAndScrollHandler, true);
-        window.addEventListener('touchstart', this.boundMouseLeaveAndScrollHandler);
-      }
-    }
-  };
-
-  // The component registers itself. It can assume componentHandler is available
-  // in the global scope.
-  componentHandler.register({
-    constructor: MaterialTooltip,
-    classAsString: 'MaterialTooltip',
-    cssClass: 'mdl-tooltip'
-  });
-})();
+/**
+ * Hide tooltip on mouseleave or scroll
+ *
+ * @private
+ */
+material.MaterialTooltip.prototype.hideTooltip_ = function() {
+  this.element_.classList.remove(MaterialTooltipCssClasses_.IS_ACTIVE);
+};
