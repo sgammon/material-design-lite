@@ -14,163 +14,166 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-(function() {
-  'use strict';
 
+/* global goog */
+
+goog.require('goog.dom.TagName');
+goog.require('goog.events.EventType');
+
+goog.provide('material.MaterialTab');
+goog.provide('material.MaterialTabs');
+
+
+/**
+ * Store strings for class names defined by this component that are used in
+ * JavaScript. This allows us to simply change it in one place should we
+ * decide to modify at a later date.
+ *
+ * @enum {string}
+ * @private
+ */
+const MaterialTabsCssClasses_ = {
+  TAB_CLASS: goog.getCssName('mdl-tabs__tab'),
+  PANEL_CLASS: goog.getCssName('mdl-tabs__panel'),
+  ACTIVE_CLASS: goog.getCssName('is-active'),
+  UPGRADED_CLASS: goog.getCssName('is-upgraded'),
+
+  MDL_JS_RIPPLE_EFFECT: goog.getCssName('mdl-js-ripple-effect'),
+  MDL_RIPPLE_CONTAINER: goog.getCssName('mdl-tabs__ripple-container'),
+  MDL_RIPPLE: goog.getCssName('mdl-ripple'),
+  MDL_JS_RIPPLE_EFFECT_IGNORE_EVENTS: goog.getCssName('mdl-js-ripple-effect--ignore-events')
+};
+
+/**
+ * Class constructor for Tabs MDL component.
+ * Implements MDL component design pattern defined at:
+ * https://github.com/jasonmayes/mdl-component-design-pattern
+ *
+ * @constructor
+ * @param {!HTMLElement} element The element that will be upgraded.
+ * @param {number=} opt_selected Optional. Tab to select, by default.
+ * @param {boolean=} opt_allow_unselected Optional. Allow un-selected state. Defaults to false.
+ */
+material.MaterialTabs = function MaterialTabs(element, opt_selected, opt_allow_unselected) {
   /**
-   * Class constructor for Tabs MDL component.
-   * Implements MDL component design pattern defined at:
-   * https://github.com/jasonmayes/mdl-component-design-pattern
+   * Root element for this set of tabs.
    *
-   * @constructor
-   * @param {Element} element The element that will be upgraded.
-   */
-  var MaterialTabs = function MaterialTabs(element) {
-    // Stores the HTML element.
-    this.element_ = element;
-
-    // Initialize instance.
-    this.init();
-  };
-  window['MaterialTabs'] = MaterialTabs;
-
-  /**
-   * Store constants in one place so they can be updated easily.
-   *
-   * @enum {string}
+   * @const
    * @private
+   * @type {!HTMLElement}
    */
-  MaterialTabs.prototype.Constant_ = {
-    // None at the moment.
-  };
+  this.element_ = element;
 
+  // Initialize instance.
+  if (this.element_.classList.contains(MaterialTabsCssClasses_.MDL_JS_RIPPLE_EFFECT))
+    this.element_.classList.add(MaterialTabsCssClasses_.MDL_JS_RIPPLE_EFFECT_IGNORE_EVENTS);
+
+  // Select element tabs, document panels
   /**
-   * Store strings for class names defined by this component that are used in
-   * JavaScript. This allows us to simply change it in one place should we
-   * decide to modify at a later date.
+   * Selects tab elements enclosed by the root element.
    *
-   * @enum {string}
+   * @const
    * @private
+   * @type {!NodeList<!HTMLAnchorElement>}
    */
-  MaterialTabs.prototype.CssClasses_ = {
-    TAB_CLASS: 'mdl-tabs__tab',
-    PANEL_CLASS: 'mdl-tabs__panel',
-    ACTIVE_CLASS: 'is-active',
-    UPGRADED_CLASS: 'is-upgraded',
-
-    MDL_JS_RIPPLE_EFFECT: 'mdl-js-ripple-effect',
-    MDL_RIPPLE_CONTAINER: 'mdl-tabs__ripple-container',
-    MDL_RIPPLE: 'mdl-ripple',
-    MDL_JS_RIPPLE_EFFECT_IGNORE_EVENTS: 'mdl-js-ripple-effect--ignore-events'
-  };
+  this.tabs_ = /** @type {!NodeList<!HTMLAnchorElement>} */ (
+    this.element_.querySelectorAll('.' + MaterialTabsCssClasses_.TAB_CLASS));
 
   /**
-   * Handle clicks to a tabs component
+   * Selects tab pane elements enclosed by the root element.
    *
+   * @const
    * @private
+   * @type {!NodeList<!HTMLElement>}
    */
-  MaterialTabs.prototype.initTabs_ = function() {
-    if (this.element_.classList.contains(this.CssClasses_.MDL_JS_RIPPLE_EFFECT)) {
-      this.element_.classList.add(
-        this.CssClasses_.MDL_JS_RIPPLE_EFFECT_IGNORE_EVENTS);
-    }
+  this.panels_ = /** @type {!NodeList<!HTMLElement>} */ (
+    this.element_.querySelectorAll('.' + MaterialTabsCssClasses_.PANEL_CLASS));
 
-    // Select element tabs, document panels
-    this.tabs_ = this.element_.querySelectorAll('.' + this.CssClasses_.TAB_CLASS);
-    this.panels_ =
-        this.element_.querySelectorAll('.' + this.CssClasses_.PANEL_CLASS);
-
-    // Create new tabs for each tab element
-    for (var i = 0; i < this.tabs_.length; i++) {
-      new MaterialTab(this.tabs_[i], this);
-    }
-
-    this.element_.classList.add(this.CssClasses_.UPGRADED_CLASS);
-  };
-
-  /**
-   * Reset tab state, dropping active classes
-   *
-   * @private
-   */
-  MaterialTabs.prototype.resetTabState_ = function() {
-    for (var k = 0; k < this.tabs_.length; k++) {
-      this.tabs_[k].classList.remove(this.CssClasses_.ACTIVE_CLASS);
-    }
-  };
-
-  /**
-   * Reset panel state, droping active classes
-   *
-   * @private
-   */
-  MaterialTabs.prototype.resetPanelState_ = function() {
-    for (var j = 0; j < this.panels_.length; j++) {
-      this.panels_[j].classList.remove(this.CssClasses_.ACTIVE_CLASS);
-    }
-  };
-
-  /**
-   * Set the active tab.
-   *
-   * @public
-   * @param {Element|number} tab The tab element or index to set active.
-   */
-  MaterialTabs.prototype.setTab = function(tab) {
-    tab = (typeof tab === 'number') ? this.tabs_[tab] : tab;
-    if (tab && tab.getAttribute('href').charAt(0) === '#') {
-      var href = tab.href.split('#')[1];
-      var panel = this.element_.querySelector('#' + href);
-      this.resetTabState_();
-      this.resetPanelState_();
-      tab.classList.add(this.CssClasses_.ACTIVE_CLASS);
-      panel.classList.add(this.CssClasses_.ACTIVE_CLASS);
-    }
-  };
-
-  /**
-   * Initialize element.
-   */
-  MaterialTabs.prototype.init = function() {
-    if (this.element_) {
-      this.initTabs_();
-    }
-  };
-
-  /**
-   * Constructor for an individual tab.
-   *
-   * @constructor
-   * @param {Element} tab The HTML element for the tab.
-   * @param {MaterialTabs} ctx The MaterialTabs object that owns the tab.
-   */
-  function MaterialTab(tab, ctx) {
-    if (tab) {
-      if (ctx.element_.classList.contains(ctx.CssClasses_.MDL_JS_RIPPLE_EFFECT)) {
-        var rippleContainer = document.createElement('span');
-        rippleContainer.classList.add(ctx.CssClasses_.MDL_RIPPLE_CONTAINER);
-        rippleContainer.classList.add(ctx.CssClasses_.MDL_JS_RIPPLE_EFFECT);
-        var ripple = document.createElement('span');
-        ripple.classList.add(ctx.CssClasses_.MDL_RIPPLE);
-        rippleContainer.appendChild(ripple);
-        tab.appendChild(rippleContainer);
-      }
-
-      tab.addEventListener('click', function(e) {
-        if (tab.getAttribute('href').charAt(0) === '#') {
-          e.preventDefault();
-          ctx.setTab(tab);
-        }
-      });
-
-    }
+  // Create new tabs for each tab element
+  for (let i = 0; i < this.tabs_.length; i++) {
+    new material.MaterialTab(this.tabs_[i], this, element);
   }
 
-  // The component registers itself. It can assume componentHandler is available
-  // in the global scope.
-  componentHandler.register({
-    constructor: MaterialTabs,
-    classAsString: 'MaterialTabs',
-    cssClass: 'mdl-js-tabs'
+  this.element_.classList.add(MaterialTabsCssClasses_.UPGRADED_CLASS);
+
+  if (opt_selected !== undefined && typeof opt_selected === 'number')
+    this.setTab(opt_selected);
+  else if (!opt_allow_unselected)
+    this.setTab(0);
+};
+
+/**
+ * Reset tab state, dropping active classes
+ *
+ * @private
+ */
+material.MaterialTabs.prototype.resetTabState_ = function() {
+  for (let k = 0; k < this.tabs_.length; k++) {
+    this.tabs_[k].classList.remove(MaterialTabsCssClasses_.ACTIVE_CLASS);
+  }
+};
+
+/**
+ * Reset panel state, dropping active classes
+ *
+ * @private
+ */
+material.MaterialTabs.prototype.resetPanelState_ = function() {
+  for (let j = 0; j < this.panels_.length; j++) {
+    this.panels_[j].classList.remove(MaterialTabsCssClasses_.ACTIVE_CLASS);
+  }
+};
+
+/**
+ * Set the active tab.
+ *
+ * @public
+ * @param {!HTMLAnchorElement|number} tab The tab element or index to set active.
+ */
+material.MaterialTabs.prototype.setTab = function(tab) {
+  const resolved = /** @type {!HTMLAnchorElement} */ (
+    (typeof tab === 'number') ? /** @type {!HTMLAnchorElement} */ (this.tabs_[tab]) : tab);
+  if (resolved && resolved.href.charAt(0) === '#') {
+    const hrefValue = /** @type {?string} */ (resolved.href);
+    if (!!hrefValue === true) {
+      const href = /** @type {!string} */ (hrefValue.split('#')[1]);
+      const panel = this.element_.querySelector('#' + href);
+
+      if (panel) {
+        this.resetTabState_();
+        this.resetPanelState_();
+        resolved.classList.add(MaterialTabsCssClasses_.ACTIVE_CLASS);
+        panel.classList.add(MaterialTabsCssClasses_.ACTIVE_CLASS);
+      }
+    }
+  }
+};
+
+/**
+ * Constructor for an individual tab.
+ *
+ * @constructor
+ * @param {!HTMLAnchorElement} tab The HTML element for the tab.
+ * @param {!material.MaterialTabs} ctx The MaterialTabs object that owns the tab.
+ * @param {!HTMLElement} container Element backing the MaterialTabs that contain this tab.
+ */
+material.MaterialTab = function MaterialTab(tab, ctx, container) {
+  if (container.classList.contains(MaterialTabsCssClasses_.MDL_JS_RIPPLE_EFFECT)) {
+    const spanTag = goog.dom.TagName.SPAN.toString();
+
+    const rippleContainer = document.createElement(spanTag);
+    rippleContainer.classList.add(MaterialTabsCssClasses_.MDL_RIPPLE_CONTAINER);
+    rippleContainer.classList.add(MaterialTabsCssClasses_.MDL_JS_RIPPLE_EFFECT);
+    const ripple = document.createElement(spanTag);
+    ripple.classList.add(MaterialTabsCssClasses_.MDL_RIPPLE);
+    rippleContainer.appendChild(ripple);
+    tab.appendChild(rippleContainer);
+  }
+
+  tab.addEventListener(goog.events.EventType.CLICK, function(e) {
+    if (tab.getAttribute('href').charAt(0) === '#') {
+      e.preventDefault();
+      ctx.setTab(tab);
+    }
   });
-})();
+};
