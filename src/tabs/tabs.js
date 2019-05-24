@@ -133,7 +133,7 @@ material.MaterialTabs.prototype.resetPanelState_ = function() {
 material.MaterialTabs.prototype.setTab = function(tab) {
   const resolved = /** @type {!HTMLAnchorElement} */ (
     (typeof tab === 'number') ? /** @type {!HTMLAnchorElement} */ (this.tabs_[tab]) : tab);
-  if (resolved && resolved.href.charAt(0) === '#') {
+  if (resolved && resolved.getAttribute('href').charAt(0) === '#') {
     const hrefValue = /** @type {?string} */ (resolved.href);
     if (!!hrefValue === true) {
       const href = /** @type {!string} */ (hrefValue.split('#')[1]);
