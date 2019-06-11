@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+goog.require('componentHandler');
 goog.require('goog.events.EventType');
 goog.require('goog.dom.TagName');
 goog.require('material.MaterialRipple');
@@ -135,3 +136,10 @@ material.MaterialButton.prototype.disable = function() {
 material.MaterialButton.prototype.enable = function() {
   this.element_.removeAttribute('disabled');
 };
+
+componentHandler.register({
+  constructor: material.MaterialButton,
+  classAsString: 'MaterialButton',
+  cssClass: goog.getCssName('mdl-js-button'),
+  widget: true
+});
