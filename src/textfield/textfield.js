@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+goog.require('componentHandler.register');
 goog.require('goog.events.EventType');
 
 goog.provide('material.MaterialTextField');
@@ -282,3 +283,11 @@ material.MaterialTextField.prototype.change = function(value) {
   this.input_.setAttribute('value', value || '');
   this.updateClasses_();
 };
+
+
+componentHandler.register({
+  constructor: material.MaterialTextField,
+  classAsString: 'MaterialTextField',
+  cssClass: goog.getCssName('mdl-js-textfield'),
+  widget: true
+});

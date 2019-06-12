@@ -53,8 +53,8 @@ const MaterialDataTableCssClasses_ = {
  * @param {!HTMLElement} element The element that will be upgraded.
  */
 material.MaterialDataTable = function MaterialDataTable(element) {
-  const td = goog.dom.TagName.TD.toString();
-  const th = goog.dom.TagName.TH.toString();
+  const tdName = goog.dom.TagName.TD.toString();
+  const thName = goog.dom.TagName.TH.toString();
 
   /**
    * Root HTML element for the MDL data table.
@@ -66,7 +66,7 @@ material.MaterialDataTable = function MaterialDataTable(element) {
   this.element_ = element;
 
   // Initialize instance.
-  const firstHeader = this.element_.querySelector(th);
+  const firstHeader = this.element_.querySelector(thName);
   const bodyRows = Array.prototype.slice.call(this.element_.querySelectorAll('tbody tr'));
   const footRows = Array.prototype.slice.call(this.element_.querySelectorAll('tfoot tr'));
   const rows = bodyRows.concat(footRows);
@@ -93,15 +93,15 @@ material.MaterialDataTable = function MaterialDataTable(element) {
 
   let rowCheckboxes = [];
   if (this.element_.classList.contains(MaterialDataTableCssClasses_.SELECTABLE)) {
-    const th = document.createElement(th);
+    const th = document.createElement(thName);
 
     th.appendChild(this.headerCheckbox);
     firstHeader.parentElement.insertBefore(th, firstHeader);
 
     for (let i = 0; i < rows.length; i++) {
-      let firstCell = rows[i].querySelector(td);
+      let firstCell = rows[i].querySelector(tdName);
       if (firstCell) {
-        let td = document.createElement(td);
+        let td = document.createElement(tdName);
         if (rows[i].parentNode.nodeName.toUpperCase() === 'TBODY') {
           let checkboxEl = this.createCheckbox_(rows[i]);
           rowCheckboxes.push(new material.MaterialCheckbox(checkboxEl));

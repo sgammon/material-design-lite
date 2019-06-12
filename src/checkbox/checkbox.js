@@ -130,7 +130,7 @@ material.MaterialCheckbox = function MaterialCheckbox(element) {
 /**
  * Handle change of state.
  *
- * @param {Event} event The event that fired.
+ * @param {!Event} event The event that fired.
  * @private
  */
 material.MaterialCheckbox.prototype.onChange_ = function(event) {
@@ -140,7 +140,7 @@ material.MaterialCheckbox.prototype.onChange_ = function(event) {
 /**
  * Handle focus of element.
  *
- * @param {Event} event The event that fired.
+ * @param {!Event} event The event that fired.
  * @private
  */
 material.MaterialCheckbox.prototype.onFocus_ = function(event) {
@@ -150,7 +150,7 @@ material.MaterialCheckbox.prototype.onFocus_ = function(event) {
 /**
  * Handle lost focus of element.
  *
- * @param {Event} event The event that fired.
+ * @param {!Event} event The event that fired.
  * @private
  */
 material.MaterialCheckbox.prototype.onBlur_ = function(event) {
@@ -160,7 +160,7 @@ material.MaterialCheckbox.prototype.onBlur_ = function(event) {
 /**
  * Handle mouseup.
  *
- * @param {Event} event The event that fired.
+ * @param {!Event} event The event that fired.
  * @private
  */
 material.MaterialCheckbox.prototype.onMouseUp_ = function(event) {
