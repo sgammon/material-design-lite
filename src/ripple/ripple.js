@@ -17,6 +17,7 @@
 
 /* global goog */
 
+goog.require('componentHandler.register');
 goog.require('goog.events.EventType');
 
 goog.provide('material.MaterialRipple');
@@ -296,3 +297,10 @@ material.MaterialRipple.prototype.upHandler_ = function(event) {
     }.bind(this), 0);
   }
 };
+
+componentHandler.register({
+  constructor: material.MaterialRipple,
+  classAsString: 'MaterialRipple',
+  cssClass: goog.getCssName('mdl-js-ripple'),
+  widget: true
+});

@@ -17,6 +17,7 @@
 
 /* global goog */
 
+goog.require('componentHandler.register');
 goog.require('goog.dom.TagName');
 goog.require('goog.events.EventType');
 
@@ -526,3 +527,11 @@ material.MaterialMenu.prototype.toggle = function(evt) {
     this.show(evt);
   }
 };
+
+
+componentHandler.register({
+  constructor: material.MaterialMenu,
+  classAsString: 'MaterialMenu',
+  cssClass: goog.getCssName('mdl-js-menu'),
+  widget: true
+});

@@ -14,241 +14,258 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-(function() {
-  'use strict';
+
+goog.require('componentHandler.register');
+goog.require('goog.dom.TagName');
+goog.require('goog.events.EventType');
+
+goog.provide('material.MaterialIconToggle');
+
+
+/**
+ * Timeout value.
+ *
+ * @const {number}
+ * @private
+ */
+const TINY_TIMEOUT_ = 0.001;
+
+
+/**
+ * Store strings for class names defined by this component that are used in
+ * JavaScript. This allows us to simply change it in one place should we
+ * decide to modify at a later date.
+ *
+ * @enum {!string}
+ * @private
+ */
+const CssClasses_ = {
+  INPUT: goog.getCssName('mdl-icon-toggle__input'),
+  JS_RIPPLE_EFFECT: goog.getCssName('mdl-js-ripple-effect'),
+  RIPPLE_IGNORE_EVENTS: goog.getCssName('mdl-js-ripple-effect--ignore-events'),
+  RIPPLE_CONTAINER: goog.getCssName('mdl-icon-toggle__ripple-container'),
+  RIPPLE_CENTER: goog.getCssName('mdl-ripple--center'),
+  RIPPLE: goog.getCssName('mdl-ripple'),
+  IS_FOCUSED: goog.getCssName('is-focused'),
+  IS_DISABLED: goog.getCssName('is-disabled'),
+  IS_CHECKED: goog.getCssName('is-checked')
+};
+
+
+/**
+ * Class constructor for icon toggle MDL component.
+ * Implements MDL component design pattern defined at:
+ * https://github.com/jasonmayes/mdl-component-design-pattern
+ *
+ * @constructor
+ * @param {!HTMLElement} element The element that will be upgraded.
+ */
+material.MaterialIconToggle = function MaterialIconToggle(element) {
+  const spanName = goog.dom.TagName.SPAN.toString();
 
   /**
-   * Class constructor for icon toggle MDL component.
-   * Implements MDL component design pattern defined at:
-   * https://github.com/jasonmayes/mdl-component-design-pattern
+   * Main element.
    *
-   * @constructor
-   * @param {HTMLElement} element The element that will be upgraded.
-   */
-  var MaterialIconToggle = function MaterialIconToggle(element) {
-    this.element_ = element;
-
-    // Initialize instance.
-    this.init();
-  };
-  window['MaterialIconToggle'] = MaterialIconToggle;
-
-  /**
-   * Store constants in one place so they can be updated easily.
-   *
-   * @enum {string | number}
+   * @const
+   * @type {!HTMLElement}
    * @private
    */
-  MaterialIconToggle.prototype.Constant_ = {
-    TINY_TIMEOUT: 0.001
-  };
+  this.element_ = element;
 
+  // Initialize instance.
   /**
-   * Store strings for class names defined by this component that are used in
-   * JavaScript. This allows us to simply change it in one place should we
-   * decide to modify at a later date.
+   * Input element.
    *
-   * @enum {string}
+   * @const
+   * @type {!HTMLInputElement}
    * @private
    */
-  MaterialIconToggle.prototype.CssClasses_ = {
-    INPUT: 'mdl-icon-toggle__input',
-    JS_RIPPLE_EFFECT: 'mdl-js-ripple-effect',
-    RIPPLE_IGNORE_EVENTS: 'mdl-js-ripple-effect--ignore-events',
-    RIPPLE_CONTAINER: 'mdl-icon-toggle__ripple-container',
-    RIPPLE_CENTER: 'mdl-ripple--center',
-    RIPPLE: 'mdl-ripple',
-    IS_FOCUSED: 'is-focused',
-    IS_DISABLED: 'is-disabled',
-    IS_CHECKED: 'is-checked'
-  };
+  this.inputElement_ = /** @type {!HTMLInputElement} */ (
+    this.element_.querySelector('.' + CssClasses_.INPUT));
 
   /**
-   * Handle change of state.
+   * Ripple element.
    *
-   * @param {Event} event The event that fired.
+   * @const
+   * @type {!HTMLSpanElement}
    * @private
    */
-  MaterialIconToggle.prototype.onChange_ = function(event) {
-    this.updateClasses_();
-  };
+  this.rippleContainerElement_ = /** @type {!HTMLSpanElement} */ (document.createElement(spanName));
 
-  /**
-   * Handle focus of element.
-   *
-   * @param {Event} event The event that fired.
-   * @private
-   */
-  MaterialIconToggle.prototype.onFocus_ = function(event) {
-    this.element_.classList.add(this.CssClasses_.IS_FOCUSED);
-  };
+  if (this.element_.classList.contains(CssClasses_.JS_RIPPLE_EFFECT)) {
+    this.element_.classList.add(CssClasses_.RIPPLE_IGNORE_EVENTS);
+    this.rippleContainerElement_.classList.add(CssClasses_.RIPPLE_CONTAINER);
+    this.rippleContainerElement_.classList.add(CssClasses_.JS_RIPPLE_EFFECT);
+    this.rippleContainerElement_.classList.add(CssClasses_.RIPPLE_CENTER);
+    this.boundRippleMouseUp = this.onMouseUp_.bind(this);
+    this.rippleContainerElement_.addEventListener(goog.events.EventType.MOUSEUP, this.boundRippleMouseUp);
 
-  /**
-   * Handle lost focus of element.
-   *
-   * @param {Event} event The event that fired.
-   * @private
-   */
-  MaterialIconToggle.prototype.onBlur_ = function(event) {
-    this.element_.classList.remove(this.CssClasses_.IS_FOCUSED);
-  };
+    const ripple = document.createElement(spanName);
+    ripple.classList.add(CssClasses_.RIPPLE);
 
-  /**
-   * Handle mouseup.
-   *
-   * @param {Event} event The event that fired.
-   * @private
-   */
-  MaterialIconToggle.prototype.onMouseUp_ = function(event) {
-    this.blur_();
-  };
+    this.rippleContainerElement_.appendChild(ripple);
+    this.element_.appendChild(this.rippleContainerElement_);
+  }
 
-  /**
-   * Handle class updates.
-   *
-   * @private
-   */
-  MaterialIconToggle.prototype.updateClasses_ = function() {
-    this.checkDisabled();
-    this.checkToggleState();
-  };
+  this.boundInputOnChange_ = this.onChange_.bind(this);
+  this.boundInputOnFocus_ = this.onFocus_.bind(this);
+  this.boundInputOnBlur_ = this.onBlur_.bind(this);
+  this.boundElementOnMouseUp_ = this.onMouseUp_.bind(this);
 
-  /**
-   * Add blur.
-   *
-   * @private
-   */
-  MaterialIconToggle.prototype.blur_ = function() {
-    // TODO: figure out why there's a focus event being fired after our blur,
-    // so that we can avoid this hack.
-    window.setTimeout(function() {
-      this.inputElement_.blur();
-    }.bind(this), /** @type {number} */ (this.Constant_.TINY_TIMEOUT));
-  };
+  this.inputElement_.addEventListener(goog.events.EventType.CHANGE, this.boundInputOnChange_);
+  this.inputElement_.addEventListener(goog.events.EventType.FOCUS, this.boundInputOnFocus_);
+  this.inputElement_.addEventListener(goog.events.EventType.BLUR, this.boundInputOnBlur_);
+  this.element_.addEventListener(goog.events.EventType.MOUSEUP, this.boundElementOnMouseUp_);
 
-  // Public methods.
+  this.updateClasses_();
+  this.element_.classList.add(goog.getCssName('is-upgraded'));
+};
 
-  /**
-   * Check the inputs toggle state and update display.
-   *
-   * @public
-   */
-  MaterialIconToggle.prototype.checkToggleState = function() {
-    if (this.inputElement_.checked) {
-      this.element_.classList.add(this.CssClasses_.IS_CHECKED);
-    } else {
-      this.element_.classList.remove(this.CssClasses_.IS_CHECKED);
-    }
-  };
-  MaterialIconToggle.prototype['checkToggleState'] =
-      MaterialIconToggle.prototype.checkToggleState;
 
-  /**
-   * Check the inputs disabled state and update display.
-   *
-   * @public
-   */
-  MaterialIconToggle.prototype.checkDisabled = function() {
-    if (this.inputElement_.disabled) {
-      this.element_.classList.add(this.CssClasses_.IS_DISABLED);
-    } else {
-      this.element_.classList.remove(this.CssClasses_.IS_DISABLED);
-    }
-  };
-  MaterialIconToggle.prototype['checkDisabled'] =
-      MaterialIconToggle.prototype.checkDisabled;
+/**
+ * Handle change of state.
+ *
+ * @param {!Event} event The event that fired.
+ * @private
+ */
+material.MaterialIconToggle.prototype.onChange_ = function(event) {
+  this.updateClasses_();
+};
 
-  /**
-   * Disable icon toggle.
-   *
-   * @public
-   */
-  MaterialIconToggle.prototype.disable = function() {
-    this.inputElement_.disabled = true;
-    this.updateClasses_();
-  };
-  MaterialIconToggle.prototype['disable'] =
-      MaterialIconToggle.prototype.disable;
 
-  /**
-   * Enable icon toggle.
-   *
-   * @public
-   */
-  MaterialIconToggle.prototype.enable = function() {
-    this.inputElement_.disabled = false;
-    this.updateClasses_();
-  };
-  MaterialIconToggle.prototype['enable'] = MaterialIconToggle.prototype.enable;
+/**
+ * Handle focus of element.
+ *
+ * @param {!Event} event The event that fired.
+ * @private
+ */
+material.MaterialIconToggle.prototype.onFocus_ = function(event) {
+  this.element_.classList.add(CssClasses_.IS_FOCUSED);
+};
 
-  /**
-   * Check icon toggle.
-   *
-   * @public
-   */
-  MaterialIconToggle.prototype.check = function() {
-    this.inputElement_.checked = true;
-    this.updateClasses_();
-  };
-  MaterialIconToggle.prototype['check'] = MaterialIconToggle.prototype.check;
 
-  /**
-   * Uncheck icon toggle.
-   *
-   * @public
-   */
-  MaterialIconToggle.prototype.uncheck = function() {
-    this.inputElement_.checked = false;
-    this.updateClasses_();
-  };
-  MaterialIconToggle.prototype['uncheck'] =
-      MaterialIconToggle.prototype.uncheck;
+/**
+ * Handle lost focus of element.
+ *
+ * @param {!Event} event The event that fired.
+ * @private
+ */
+material.MaterialIconToggle.prototype.onBlur_ = function(event) {
+  this.element_.classList.remove(CssClasses_.IS_FOCUSED);
+};
 
-  /**
-   * Initialize element.
-   */
-  MaterialIconToggle.prototype.init = function() {
+/**
+ * Handle mouseup.
+ *
+ * @param {!Event} event The event that fired.
+ * @private
+ */
+material.MaterialIconToggle.prototype.onMouseUp_ = function(event) {
+  this.blur_();
+};
 
-    if (this.element_) {
-      this.inputElement_ =
-          this.element_.querySelector('.' + this.CssClasses_.INPUT);
+/**
+ * Handle class updates.
+ *
+ * @private
+ */
+material.MaterialIconToggle.prototype.updateClasses_ = function() {
+  this.checkDisabled();
+  this.checkToggleState();
+};
 
-      if (this.element_.classList.contains(this.CssClasses_.JS_RIPPLE_EFFECT)) {
-        this.element_.classList.add(this.CssClasses_.RIPPLE_IGNORE_EVENTS);
-        this.rippleContainerElement_ = document.createElement('span');
-        this.rippleContainerElement_.classList.add(this.CssClasses_.RIPPLE_CONTAINER);
-        this.rippleContainerElement_.classList.add(this.CssClasses_.JS_RIPPLE_EFFECT);
-        this.rippleContainerElement_.classList.add(this.CssClasses_.RIPPLE_CENTER);
-        this.boundRippleMouseUp = this.onMouseUp_.bind(this);
-        this.rippleContainerElement_.addEventListener('mouseup', this.boundRippleMouseUp);
+/**
+ * Add blur.
+ *
+ * @private
+ */
+material.MaterialIconToggle.prototype.blur_ = function() {
+  // TODO: figure out why there's a focus event being fired after our blur,
+  // so that we can avoid this hack.
+  window.setTimeout(function() {
+    this.inputElement_.blur();
+  }.bind(this), /** @type {number} */ (TINY_TIMEOUT_));
+};
 
-        var ripple = document.createElement('span');
-        ripple.classList.add(this.CssClasses_.RIPPLE);
+// Public methods.
 
-        this.rippleContainerElement_.appendChild(ripple);
-        this.element_.appendChild(this.rippleContainerElement_);
-      }
+/**
+ * Check the inputs toggle state and update display.
+ *
+ * @public
+ */
+material.MaterialIconToggle.prototype.checkToggleState = function() {
+  if (this.inputElement_.checked) {
+    this.element_.classList.add(CssClasses_.IS_CHECKED);
+  } else {
+    this.element_.classList.remove(CssClasses_.IS_CHECKED);
+  }
+};
 
-      this.boundInputOnChange = this.onChange_.bind(this);
-      this.boundInputOnFocus = this.onFocus_.bind(this);
-      this.boundInputOnBlur = this.onBlur_.bind(this);
-      this.boundElementOnMouseUp = this.onMouseUp_.bind(this);
-      this.inputElement_.addEventListener('change', this.boundInputOnChange);
-      this.inputElement_.addEventListener('focus', this.boundInputOnFocus);
-      this.inputElement_.addEventListener('blur', this.boundInputOnBlur);
-      this.element_.addEventListener('mouseup', this.boundElementOnMouseUp);
 
-      this.updateClasses_();
-      this.element_.classList.add('is-upgraded');
-    }
-  };
+/**
+ * Check the inputs disabled state and update display.
+ *
+ * @public
+ */
+material.MaterialIconToggle.prototype.checkDisabled = function() {
+  if (this.inputElement_.disabled) {
+    this.element_.classList.add(CssClasses_.IS_DISABLED);
+  } else {
+    this.element_.classList.remove(CssClasses_.IS_DISABLED);
+  }
+};
 
-  // The component registers itself. It can assume componentHandler is available
-  // in the global scope.
-  componentHandler.register({
-    constructor: MaterialIconToggle,
-    classAsString: 'MaterialIconToggle',
-    cssClass: 'mdl-js-icon-toggle',
-    widget: true
-  });
-})();
+
+/**
+ * Disable icon toggle.
+ *
+ * @public
+ */
+material.MaterialIconToggle.prototype.disable = function() {
+  this.inputElement_.disabled = true;
+  this.updateClasses_();
+};
+
+
+/**
+ * Enable icon toggle.
+ *
+ * @public
+ */
+material.MaterialIconToggle.prototype.enable = function() {
+  this.inputElement_.disabled = false;
+  this.updateClasses_();
+};
+
+
+/**
+ * Check icon toggle.
+ *
+ * @public
+ */
+material.MaterialIconToggle.prototype.check = function() {
+  this.inputElement_.checked = true;
+  this.updateClasses_();
+};
+
+
+/**
+ * Uncheck icon toggle.
+ *
+ * @public
+ */
+material.MaterialIconToggle.prototype.uncheck = function() {
+  this.inputElement_.checked = false;
+  this.updateClasses_();
+};
+
+
+// The component registers itself. It can assume componentHandler is available
+// in the global scope.
+componentHandler.register({
+  constructor: material.MaterialIconToggle,
+  classAsString: 'MaterialIconToggle',
+  cssClass: goog.getCssName('mdl-js-icon-toggle'),
+  widget: true
+});

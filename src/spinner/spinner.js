@@ -17,6 +17,7 @@
 
 /* global goog */
 
+goog.require('componentHandler.register');
 goog.require('goog.dom.TagName');
 
 goog.provide('material.MaterialSpinner');
@@ -127,3 +128,11 @@ material.MaterialSpinner.prototype.stop = function() {
 material.MaterialSpinner.prototype.start = function() {
   this.element_.classList.add(goog.getCssName('is-active'));
 };
+
+
+componentHandler.register({
+  constructor: material.MaterialSnackbar,
+  classAsString: 'MaterialSnackbar',
+  cssClass: goog.getCssName('mdl-js-snackbar'),
+  widget: true
+});

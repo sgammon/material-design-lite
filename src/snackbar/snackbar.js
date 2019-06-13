@@ -16,6 +16,7 @@
 
 /* global goog */
 
+goog.require('componentHandler.register');
 goog.require('goog.events.EventType');
 
 goog.provide('material.MaterialSnackbar');
@@ -281,3 +282,11 @@ material.MaterialSnackbar.prototype.setActionHidden_ = function(value) {
     this.actionElement_.removeAttribute('aria-hidden');
   }
 };
+
+
+componentHandler.register({
+  constructor: material.MaterialSnackbar,
+  classAsString: 'MaterialSnackbar',
+  cssClass: goog.getCssName('mdl-js-snackbar'),
+  widget: true
+});

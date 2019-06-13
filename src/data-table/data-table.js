@@ -17,6 +17,7 @@
 
 /* global goog */
 
+goog.require('componentHandler.register');
 goog.require('goog.dom.TagName');
 goog.require('goog.events.EventType');
 goog.require('material.MaterialCheckbox');
@@ -76,7 +77,7 @@ material.MaterialDataTable = function MaterialDataTable(element) {
    *
    * @const
    * @private
-   * @type {!HTMLElement}
+   * @type {?HTMLElement}
    */
   this.headerCheckbox = this.element_.classList.contains(MaterialDataTableCssClasses_.SELECTABLE) ?
     this.createCheckbox_(null, rows) : null;
@@ -88,8 +89,8 @@ material.MaterialDataTable = function MaterialDataTable(element) {
    * @private
    * @type {?material.MaterialCheckbox}
    */
-  this.mdlHeaderCheckbox = this.headerCheckbox ?
-    new material.MaterialCheckbox(this.headerCheckbox) : null;
+  this.mdlHeaderCheckbox = !!this.headerCheckbox ?
+    new material.MaterialCheckbox(/** @type {!HTMLElement} */ (this.headerCheckbox)) : null;
 
   let rowCheckboxes = [];
   if (this.element_.classList.contains(MaterialDataTableCssClasses_.SELECTABLE)) {
@@ -128,14 +129,12 @@ material.MaterialDataTable = function MaterialDataTable(element) {
  * single row (or multiple rows).
  *
  * @param {!HTMLInputElement} checkbox Checkbox that toggles the selection state.
- * @param {!HTMLElement} row Row to toggle when checkbox changes.
- * @param {(Array<Object>|NodeList)=} opt_rows Rows to toggle when checkbox changes.
- * @return {function(): void} Function that handles row selection events.
+ * @param {?HTMLElement} row Row to toggle when checkbox changes.
+ * @param {(!Array<!Object>|!NodeList)=} opt_rows Rows to toggle when checkbox changes.
+ * @return {function(): void|null} Function that handles row selection events.
  * @private
  */
 material.MaterialDataTable.prototype.selectRow_ = function(checkbox, row, opt_rows) {
-  const td = goog.dom.TagName.TD.toString();
-
   if (row) {
     /**
      * Callback function, prepared to handle row selection events.
@@ -163,18 +162,15 @@ material.MaterialDataTable.prototype.selectRow_ = function(checkbox, row, opt_ro
      */
     function multiRowCallback_() {
       let i;
-      let el;
       let cbox;
       if (checkbox.checked) {
         for (i = 0; i < opt_rows.length; i++) {
-          el = opt_rows[i].querySelector(td).querySelector('.' + MaterialDataTableCssClasses_.CHECKBOX);
           cbox = this.rowCheckboxes_[i];
           cbox.check();
           opt_rows[i].classList.add(MaterialDataTableCssClasses_.IS_SELECTED);
         }
       } else {
         for (i = 0; i < opt_rows.length; i++) {
-          el = opt_rows[i].querySelector(td).querySelector('.' + MaterialDataTableCssClasses_.CHECKBOX);
           cbox = this.rowCheckboxes_[i];
           cbox.uncheck();
           opt_rows[i].classList.remove(MaterialDataTableCssClasses_.IS_SELECTED);
@@ -183,19 +179,21 @@ material.MaterialDataTable.prototype.selectRow_ = function(checkbox, row, opt_ro
     }
     return multiRowCallback_.bind(this);
   }
+  return null;
 };
 
 /**
  * Creates a checkbox for a single or or multiple rows and hooks up the
  * event handling.
  *
- * @param {Element} row Row to toggle when checkbox changes.
- * @param {(Array<Object>|NodeList)=} opt_rows Rows to toggle when checkbox changes.
- * @return {!HTMLInputElement} Prepared checkbox element, pre-MDL.
+ * @param {?Element} row Row to toggle when checkbox changes.
+ * @param {(!Array<!Object>|!NodeList)=} opt_rows Rows to toggle when checkbox changes.
+ * @return {!HTMLElement} Prepared checkbox element, pre-MDL.
  * @private
  */
 material.MaterialDataTable.prototype.createCheckbox_ = function(row, opt_rows) {
   const labelTag = goog.dom.TagName.LABEL.toString();
+  const inputTag = goog.dom.TagName.INPUT.toString();
   const label = document.createElement(labelTag);
   const labelClasses = [
     MaterialDataTableCssClasses_.CHECKBOX,
@@ -204,17 +202,31 @@ material.MaterialDataTable.prototype.createCheckbox_ = function(row, opt_rows) {
     MaterialDataTableCssClasses_.SELECT_ELEMENT
   ];
   label.className = labelClasses.join(' ');
-  const checkbox = document.createElement(labelTag);
+  const checkbox = /** @type {!HTMLInputElement} */ (document.createElement(inputTag));
   checkbox.type = 'checkbox';
   checkbox.classList.add(MaterialDataTableCssClasses_.JS_CHECKBOX_INPUT);
 
   if (row) {
-    checkbox.checked = row.classList.contains(this.CssClasses_.IS_SELECTED);
-    checkbox.addEventListener(goog.events.EventType.CHANGE, this.selectRow_(checkbox, row));
+    checkbox.checked = row.classList.contains(MaterialDataTableCssClasses_.IS_SELECTED);
+    checkbox.addEventListener(goog.events.EventType.CHANGE,
+      this.selectRow_(
+        /** @type {!HTMLInputElement} */ (checkbox),
+        /** @type {!HTMLElement} */ (row)));
   } else if (opt_rows) {
-    checkbox.addEventListener(goog.events.EventType.CHANGE, this.selectRow_(checkbox, null, opt_rows));
+    checkbox.addEventListener(goog.events.EventType.CHANGE,
+      this.selectRow_(
+        /** @type {!HTMLInputElement} */ (checkbox),
+        null,
+        opt_rows));
   }
 
   label.appendChild(checkbox);
-  return label;
+  return /** @type {!HTMLElement} */ (label);
 };
+
+
+componentHandler.register({
+  constructor: material.MaterialDataTable,
+  classAsString: 'MaterialDataTable',
+  cssClass: goog.getCssName('mdl-js-data-table')
+});

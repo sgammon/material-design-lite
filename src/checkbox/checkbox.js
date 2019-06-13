@@ -17,6 +17,7 @@
 
 /* global goog */
 
+goog.require('componentHandler.register');
 goog.require('goog.dom.TagName');
 goog.require('goog.events.EventType');
 
@@ -144,7 +145,7 @@ material.MaterialCheckbox.prototype.onChange_ = function(event) {
  * @private
  */
 material.MaterialCheckbox.prototype.onFocus_ = function(event) {
-  this.element_.classList.add(this.CssClasses_.IS_FOCUSED);
+  this.element_.classList.add(MaterialCheckboxCssClasses_.IS_FOCUSED);
 };
 
 /**
@@ -154,7 +155,7 @@ material.MaterialCheckbox.prototype.onFocus_ = function(event) {
  * @private
  */
 material.MaterialCheckbox.prototype.onBlur_ = function(event) {
-  this.element_.classList.remove(this.CssClasses_.IS_FOCUSED);
+  this.element_.classList.remove(MaterialCheckboxCssClasses_.IS_FOCUSED);
 };
 
 /**
@@ -209,9 +210,9 @@ material.MaterialCheckbox.prototype.isChecked = function() {
  */
 material.MaterialCheckbox.prototype.checkToggleState = function() {
   if (this.inputElement_.checked) {
-    this.element_.classList.add(this.CssClasses_.IS_CHECKED);
+    this.element_.classList.add(MaterialCheckboxCssClasses_.IS_CHECKED);
   } else {
-    this.element_.classList.remove(this.CssClasses_.IS_CHECKED);
+    this.element_.classList.remove(MaterialCheckboxCssClasses_.IS_CHECKED);
   }
 };
 
@@ -222,9 +223,9 @@ material.MaterialCheckbox.prototype.checkToggleState = function() {
  */
 material.MaterialCheckbox.prototype.checkDisabled = function() {
   if (this.inputElement_.disabled) {
-    this.element_.classList.add(this.CssClasses_.IS_DISABLED);
+    this.element_.classList.add(MaterialCheckboxCssClasses_.IS_DISABLED);
   } else {
-    this.element_.classList.remove(this.CssClasses_.IS_DISABLED);
+    this.element_.classList.remove(MaterialCheckboxCssClasses_.IS_DISABLED);
   }
 };
 
@@ -267,3 +268,11 @@ material.MaterialCheckbox.prototype.uncheck = function() {
   this.inputElement_.checked = false;
   this.updateClasses_();
 };
+
+
+componentHandler.register({
+  constructor: material.MaterialCheckbox,
+  classAsString: 'MaterialCheckbox',
+  cssClass: goog.getCssName('mdl-js-checkbox'),
+  widget: true
+});

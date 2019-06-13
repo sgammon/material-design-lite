@@ -17,6 +17,7 @@
 
 /* global goog */
 
+goog.require('componentHandler.register');
 goog.require('goog.events.EventType');
 
 goog.provide('material.MaterialTooltip');
@@ -66,7 +67,9 @@ material.MaterialTooltip = function MaterialTooltip(element) {
    * @private
    * @type {?HTMLElement}
    */
-  this.forElement_ = forElId ? document.getElementById(forElId) : null;
+  this.forElement_ = forElId ?
+    /** @type {?HTMLElement} */ (document.getElementById(forElId))
+    : null;
 
   if (this.forElement_) {
     // It's left here because it prevents accidental text selection on Android
@@ -76,22 +79,28 @@ material.MaterialTooltip = function MaterialTooltip(element) {
 
     this.boundMouseEnterHandler = this.handleMouseEnter_.bind(this);
     this.boundMouseLeaveAndScrollHandler = this.hideTooltip_.bind(this);
-    this.forElement_.addEventListener(goog.events.EventType.MOUSEENTER, this.boundMouseEnterHandler, false);
-    this.forElement_.addEventListener(goog.events.EventType.TOUCHEND, this.boundMouseEnterHandler, false);
-    this.forElement_.addEventListener(goog.events.EventType.MOUSELEAVE, this.boundMouseLeaveAndScrollHandler, false);
-    window.addEventListener(goog.events.EventType.SCROLL, this.boundMouseLeaveAndScrollHandler, true);
-    window.addEventListener(goog.events.EventType.TOUCHSTART, this.boundMouseLeaveAndScrollHandler);
+    this.forElement_.addEventListener(goog.events.EventType.MOUSEENTER,
+      /** @type {!function(!Event): void} */ (this.boundMouseEnterHandler), false);
+    this.forElement_.addEventListener(goog.events.EventType.TOUCHEND,
+      /** @type {!function(!Event): void} */ (this.boundMouseEnterHandler), false);
+    this.forElement_.addEventListener(goog.events.EventType.MOUSELEAVE,
+      /** @type {!function(!Event): void} */ (this.boundMouseLeaveAndScrollHandler), false);
+    window.addEventListener(goog.events.EventType.SCROLL,
+      /** @type {!function(!Event): void} */ (this.boundMouseLeaveAndScrollHandler), true);
+    window.addEventListener(goog.events.EventType.TOUCHSTART,
+      /** @type {!function(!Event): void} */ (this.boundMouseLeaveAndScrollHandler));
   }
 };
 
 /**
  * Handle mouseenter for tooltip.
  *
- * @param {Event} event The event that fired.
+ * @param {!MouseEvent} event The event that fired.
  * @private
  */
 material.MaterialTooltip.prototype.handleMouseEnter_ = function(event) {
-  const props = event.target.getBoundingClientRect();
+  const targetEl = /** @type {!HTMLElement} */ (event.target);
+  const props = targetEl.getBoundingClientRect();
   const left = props.left + (props.width / 2);
   const top = props.top + (props.height / 2);
   const marginLeft = -1 * (this.element_.offsetWidth / 2);
@@ -137,3 +146,10 @@ material.MaterialTooltip.prototype.handleMouseEnter_ = function(event) {
 material.MaterialTooltip.prototype.hideTooltip_ = function() {
   this.element_.classList.remove(MaterialTooltipCssClasses_.IS_ACTIVE);
 };
+
+
+componentHandler.register({
+  constructor: material.MaterialTooltip,
+  classAsString: 'MaterialTooltip',
+  cssClass: goog.getCssName('mdl-tooltip')
+});
