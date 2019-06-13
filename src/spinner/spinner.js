@@ -131,8 +131,8 @@ material.MaterialSpinner.prototype.start = function() {
 
 
 componentHandler.register({
-  constructor: material.MaterialSnackbar,
-  classAsString: 'MaterialSnackbar',
-  cssClass: goog.getCssName('mdl-js-snackbar'),
+  constructor: material.MaterialSpinner,
+  classAsString: 'MaterialSpinner',
+  cssClass: goog.getCssName('mdl-js-spinner'),
   widget: true
 });
