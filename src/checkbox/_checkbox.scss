@@ -118,7 +118,7 @@
   left: 0;
   height: 100%;
   width: 100%;
-  mask: url("#{$checkbox-image-path}/tick-mask.svg?embed");
+  mask: url("data:image/svg+xml,%3Csvg xmlns:dc='http://purl.org/dc/elements/1.1/' xmlns:cc='http://creativecommons.org/ns%23' xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns%23' xmlns:svg='http://www.w3.org/2000/svg' xmlns='http://www.w3.org/2000/svg' version='1.1' viewBox='0 0 1 1' preserveAspectRatio='xMinYMin meet'%3E%3Cdefs%3E%3CclipPath id='clip'%3E%3Cpath d='M 0,0 0,1 1,1 1,0 0,0 z M 0.8534375,0.1671875 0.9596875,0.273125 0.429375,0.8034375 0.323125,0.9096875 0.2171875,0.8034375 0.0403125,0.626875 0.1465625,0.520625 0.323125,0.6975 0.8534375,0.1671875 z' style='fill:%23ffffff;fill-opacity:1;stroke:none' /%3E%3C/clipPath%3E%3Cmask id='mask' maskUnits='objectBoundingBox' maskContentUnits='objectBoundingBox'%3E%3Cpath d='M 0,0 0,1 1,1 1,0 0,0 z M 0.8534375,0.1671875 0.9596875,0.273125 0.429375,0.8034375 0.323125,0.9096875 0.2171875,0.8034375 0.0403125,0.626875 0.1465625,0.520625 0.323125,0.6975 0.8534375,0.1671875 z' style='fill:%23ffffff;fill-opacity:1;stroke:none' /%3E%3C/mask%3E%3C/defs%3E%3Crect width='1' height='1' x='0' y='0' clip-path='url(%23clip)' style='fill:%23000000;fill-opacity:1;stroke:none' /%3E%3C/svg%3E%0A");
 
   background: transparent;
   @include material-animation-default(0.28s);
@@ -126,7 +126,7 @@
 
   .mdl-checkbox.is-checked & {
     background-color: $checkbox-color;
-    background-image: url("#{$checkbox-image-path}/tick.svg?embed");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns:dc='http://purl.org/dc/elements/1.1/' xmlns:cc='http://creativecommons.org/ns%23' xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns%23' xmlns:svg='http://www.w3.org/2000/svg' xmlns='http://www.w3.org/2000/svg' version='1.1' viewBox='0 0 1 1' preserveAspectRatio='xMinYMin meet'%3E%3Cpath d='M 0.04038059,0.6267767 0.14644661,0.52071068 0.42928932,0.80355339 0.3232233,0.90961941 z M 0.21715729,0.80355339 0.85355339,0.16715729 0.95961941,0.2732233 0.3232233,0.90961941 z' id='rect3780' style='fill:%23ffffff;fill-opacity:1;stroke:none' /%3E%3C/svg%3E%0A");
   }
 
   fieldset[disabled] .mdl-checkbox.is-checked &,
