@@ -226,16 +226,20 @@ material.MaterialTextField.prototype.checkFocus = function() {
 /**
  * Check the validity state and update field accordingly.
  *
+ * @return {boolean} Whether the field is currently valid or not.
  * @public
  */
 material.MaterialTextField.prototype.checkValidity = function() {
   if (this.input_.validity) {
     if (this.input_.validity.valid) {
       this.element_.classList.remove(MaterialTextfieldClasses_.IS_INVALID);
+      return true;
     } else {
       this.element_.classList.add(MaterialTextfieldClasses_.IS_INVALID);
+      return false;
     }
   }
+  return true;
 };
 
 /**
