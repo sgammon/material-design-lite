@@ -14,259 +14,280 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-(function() {
-  'use strict';
 
+goog.provide('material.MaterialSwitch');
+
+goog.require('componentHandler.register');
+goog.require('goog.events.EventType');
+
+
+/**
+ * Tiny timeout value.
+ *
+ * @const
+ * @type {number}
+ * @private
+ */
+const SWITCH_TINY_TIMEOUT_ = 0.001;
+
+/**
+ * Store strings for class names defined by this component that are used in
+ * JavaScript. This allows us to simply change it in one place should we
+ * decide to modify at a later date.
+ *
+ * @enum {string}
+ * @private
+ */
+const MaterialSwitchCssClasses_ = {
+  INPUT: goog.getCssName('mdl-switch__input'),
+  TRACK: goog.getCssName('mdl-switch__track'),
+  THUMB: goog.getCssName('mdl-switch__thumb'),
+  FOCUS_HELPER: goog.getCssName('mdl-switch__focus-helper'),
+  RIPPLE_EFFECT: goog.getCssName('mdl-js-ripple-effect'),
+  RIPPLE_IGNORE_EVENTS: goog.getCssName('mdl-js-ripple-effect--ignore-events'),
+  RIPPLE_CONTAINER: goog.getCssName('mdl-switch__ripple-container'),
+  RIPPLE_CENTER: goog.getCssName('mdl-ripple--center'),
+  RIPPLE: goog.getCssName('mdl-ripple'),
+  IS_FOCUSED: goog.getCssName('is-focused'),
+  IS_DISABLED: goog.getCssName('is-disabled'),
+  IS_CHECKED: goog.getCssName('is-checked')
+};
+
+/**
+ * Class constructor for Checkbox MDL component.
+ * Implements MDL component design pattern defined at:
+ * https://github.com/jasonmayes/mdl-component-design-pattern
+ *
+ * @public
+ * @constructor
+ * @param {!HTMLElement} element The element that will be upgraded.
+ */
+material.MaterialSwitch = function MaterialSwitch(element) {
+  this.element_ = element;
+
+  // Initialize instance.
   /**
-   * Class constructor for Checkbox MDL component.
-   * Implements MDL component design pattern defined at:
-   * https://github.com/jasonmayes/mdl-component-design-pattern
+   * Input element.
    *
-   * @constructor
-   * @param {HTMLElement} element The element that will be upgraded.
-   */
-  var MaterialSwitch = function MaterialSwitch(element) {
-    this.element_ = element;
-
-    // Initialize instance.
-    this.init();
-  };
-  window['MaterialSwitch'] = MaterialSwitch;
-
-  /**
-   * Store constants in one place so they can be updated easily.
-   *
-   * @enum {string | number}
+   * @const
+   * @type {!HTMLInputElement}
    * @private
    */
-  MaterialSwitch.prototype.Constant_ = {
-    TINY_TIMEOUT: 0.001
-  };
+  this.inputElement_ = /** @type {!HTMLInputElement} */ (this.element_.querySelector('.' +
+    MaterialSwitchCssClasses_.INPUT));
+
+  const track = document.createElement('div');
+  track.classList.add(MaterialSwitchCssClasses_.TRACK);
+
+  const thumb = document.createElement('div');
+  thumb.classList.add(MaterialSwitchCssClasses_.THUMB);
+
+  const focusHelper = document.createElement('span');
+  focusHelper.classList.add(MaterialSwitchCssClasses_.FOCUS_HELPER);
+
+  thumb.appendChild(focusHelper);
+
+  this.element_.appendChild(track);
+  this.element_.appendChild(thumb);
 
   /**
-   * Store strings for class names defined by this component that are used in
-   * JavaScript. This allows us to simply change it in one place should we
-   * decide to modify at a later date.
+   * Bound copy of the moust-up handler.
    *
-   * @enum {string}
+   * @const
    * @private
    */
-  MaterialSwitch.prototype.CssClasses_ = {
-    INPUT: 'mdl-switch__input',
-    TRACK: 'mdl-switch__track',
-    THUMB: 'mdl-switch__thumb',
-    FOCUS_HELPER: 'mdl-switch__focus-helper',
-    RIPPLE_EFFECT: 'mdl-js-ripple-effect',
-    RIPPLE_IGNORE_EVENTS: 'mdl-js-ripple-effect--ignore-events',
-    RIPPLE_CONTAINER: 'mdl-switch__ripple-container',
-    RIPPLE_CENTER: 'mdl-ripple--center',
-    RIPPLE: 'mdl-ripple',
-    IS_FOCUSED: 'is-focused',
-    IS_DISABLED: 'is-disabled',
-    IS_CHECKED: 'is-checked'
-  };
+  this.boundMouseUpHandler_ = this.onMouseUp_.bind(this);
 
   /**
-   * Handle change of state.
+   * Ripple container element.
    *
-   * @param {Event} event The event that fired.
+   * @const
+   * @type {!HTMLSpanElement}
    * @private
    */
-  MaterialSwitch.prototype.onChange_ = function(event) {
-    this.updateClasses_();
-  };
+  this.rippleContainerElement_ = /** @type {!HTMLSpanElement} */ (
+    document.createElement('span'));
+
+  if (this.element_.classList.contains(
+    MaterialSwitchCssClasses_.RIPPLE_EFFECT)) {
+    this.element_.classList.add(
+      MaterialSwitchCssClasses_.RIPPLE_IGNORE_EVENTS);
+    this.rippleContainerElement_.classList.add(
+      MaterialSwitchCssClasses_.RIPPLE_CONTAINER);
+    this.rippleContainerElement_.classList.add(MaterialSwitchCssClasses_.RIPPLE_EFFECT);
+    this.rippleContainerElement_.classList.add(MaterialSwitchCssClasses_.RIPPLE_CENTER);
+    this.rippleContainerElement_.addEventListener(goog.events.EventType.MOUSEUP, this.boundMouseUpHandler_);
+
+    const ripple = document.createElement('span');
+    ripple.classList.add(MaterialSwitchCssClasses_.RIPPLE);
+
+    this.rippleContainerElement_.appendChild(ripple);
+    this.element_.appendChild(this.rippleContainerElement_);
+  }
 
   /**
-   * Handle focus of element.
-   *
-   * @param {Event} event The event that fired.
+   * @const
    * @private
    */
-  MaterialSwitch.prototype.onFocus_ = function(event) {
-    this.element_.classList.add(this.CssClasses_.IS_FOCUSED);
-  };
+  this.boundChangeHandler_ = this.onChange_.bind(this);
 
   /**
-   * Handle lost focus of element.
-   *
-   * @param {Event} event The event that fired.
+   * @const
    * @private
    */
-  MaterialSwitch.prototype.onBlur_ = function(event) {
-    this.element_.classList.remove(this.CssClasses_.IS_FOCUSED);
-  };
+  this.boundFocusHandler_ = this.onFocus_.bind(this);
 
   /**
-   * Handle mouseup.
-   *
-   * @param {Event} event The event that fired.
+   * @const
    * @private
    */
-  MaterialSwitch.prototype.onMouseUp_ = function(event) {
-    this.blur_();
-  };
+  this.boundBlurHandler_ = this.onBlur_.bind(this);
 
-  /**
-   * Handle class updates.
-   *
-   * @private
-   */
-  MaterialSwitch.prototype.updateClasses_ = function() {
-    this.checkDisabled();
-    this.checkToggleState();
-  };
+  this.inputElement_.addEventListener(goog.events.EventType.CHANGE, this.boundChangeHandler_);
+  this.inputElement_.addEventListener(goog.events.EventType.FOCUS, this.boundFocusHandler_);
+  this.inputElement_.addEventListener(goog.events.EventType.BLUR, this.boundBlurHandler_);
+  this.element_.addEventListener(goog.events.EventType.MOUSEUP, this.boundMouseUpHandler_);
 
-  /**
-   * Add blur.
-   *
-   * @private
-   */
-  MaterialSwitch.prototype.blur_ = function() {
-    // TODO: figure out why there's a focus event being fired after our blur,
-    // so that we can avoid this hack.
-    window.setTimeout(function() {
-      this.inputElement_.blur();
-    }.bind(this), /** @type {number} */ (this.Constant_.TINY_TIMEOUT));
-  };
+  this.updateClasses_();
+  this.element_.classList.add(goog.getCssName('is-upgraded'));
+};
 
-  // Public methods.
+/**
+ * Handle change of state.
+ *
+ * @param {!Event} event The event that fired.
+ * @private
+ */
+material.MaterialSwitch.prototype.onChange_ = function(event) {
+  this.updateClasses_();
+};
 
-  /**
-   * Check the components disabled state.
-   *
-   * @public
-   */
-  MaterialSwitch.prototype.checkDisabled = function() {
-    if (this.inputElement_.disabled) {
-      this.element_.classList.add(this.CssClasses_.IS_DISABLED);
-    } else {
-      this.element_.classList.remove(this.CssClasses_.IS_DISABLED);
-    }
-  };
-  MaterialSwitch.prototype['checkDisabled'] =
-      MaterialSwitch.prototype.checkDisabled;
+/**
+ * Handle focus of element.
+ *
+ * @param {!Event} event The event that fired.
+ * @private
+ */
+material.MaterialSwitch.prototype.onFocus_ = function(event) {
+  this.element_.classList.add(MaterialSwitchCssClasses_.IS_FOCUSED);
+};
 
-  /**
-   * Check the components toggled state.
-   *
-   * @public
-   */
-  MaterialSwitch.prototype.checkToggleState = function() {
-    if (this.inputElement_.checked) {
-      this.element_.classList.add(this.CssClasses_.IS_CHECKED);
-    } else {
-      this.element_.classList.remove(this.CssClasses_.IS_CHECKED);
-    }
-  };
-  MaterialSwitch.prototype['checkToggleState'] =
-      MaterialSwitch.prototype.checkToggleState;
+/**
+ * Handle lost focus of element.
+ *
+ * @param {!Event} event The event that fired.
+ * @private
+ */
+material.MaterialSwitch.prototype.onBlur_ = function(event) {
+  this.element_.classList.remove(MaterialSwitchCssClasses_.IS_FOCUSED);
+};
 
-  /**
-   * Disable switch.
-   *
-   * @public
-   */
-  MaterialSwitch.prototype.disable = function() {
-    this.inputElement_.disabled = true;
-    this.updateClasses_();
-  };
-  MaterialSwitch.prototype['disable'] = MaterialSwitch.prototype.disable;
+/**
+ * Handle mouseup.
+ *
+ * @param {!Event} event The event that fired.
+ * @private
+ */
+material.MaterialSwitch.prototype.onMouseUp_ = function(event) {
+  this.blur_();
+};
 
-  /**
-   * Enable switch.
-   *
-   * @public
-   */
-  MaterialSwitch.prototype.enable = function() {
-    this.inputElement_.disabled = false;
-    this.updateClasses_();
-  };
-  MaterialSwitch.prototype['enable'] = MaterialSwitch.prototype.enable;
+/**
+ * Handle class updates.
+ *
+ * @private
+ */
+material.MaterialSwitch.prototype.updateClasses_ = function() {
+  this.checkDisabled();
+  this.checkToggleState();
+};
 
-  /**
-   * Activate switch.
-   *
-   * @public
-   */
-  MaterialSwitch.prototype.on = function() {
-    this.inputElement_.checked = true;
-    this.updateClasses_();
-  };
-  MaterialSwitch.prototype['on'] = MaterialSwitch.prototype.on;
+/**
+ * Add blur.
+ *
+ * @private
+ */
+material.MaterialSwitch.prototype.blur_ = function() {
+  // TODO: figure out why there's a focus event being fired after our blur,
+  // so that we can avoid this hack.
+  window.setTimeout(function() {
+    this.inputElement_.blur();
+  }.bind(this), /** @type {number} */ (SWITCH_TINY_TIMEOUT_));
+};
 
-  /**
-   * Deactivate switch.
-   *
-   * @public
-   */
-  MaterialSwitch.prototype.off = function() {
-    this.inputElement_.checked = false;
-    this.updateClasses_();
-  };
-  MaterialSwitch.prototype['off'] = MaterialSwitch.prototype.off;
+// Public methods.
 
-  /**
-   * Initialize element.
-   */
-  MaterialSwitch.prototype.init = function() {
-    if (this.element_) {
-      this.inputElement_ = this.element_.querySelector('.' +
-          this.CssClasses_.INPUT);
+/**
+ * Check the components disabled state.
+ *
+ * @public
+ */
+material.MaterialSwitch.prototype.checkDisabled = function() {
+  if (this.inputElement_.disabled) {
+    this.element_.classList.add(MaterialSwitchCssClasses_.IS_DISABLED);
+  } else {
+    this.element_.classList.remove(MaterialSwitchCssClasses_.IS_DISABLED);
+  }
+};
 
-      var track = document.createElement('div');
-      track.classList.add(this.CssClasses_.TRACK);
+/**
+ * Check the components toggled state.
+ *
+ * @public
+ */
+material.MaterialSwitch.prototype.checkToggleState = function() {
+  if (this.inputElement_.checked) {
+    this.element_.classList.add(MaterialSwitchCssClasses_.IS_CHECKED);
+  } else {
+    this.element_.classList.remove(MaterialSwitchCssClasses_.IS_CHECKED);
+  }
+};
 
-      var thumb = document.createElement('div');
-      thumb.classList.add(this.CssClasses_.THUMB);
+/**
+ * Disable switch.
+ *
+ * @public
+ */
+material.MaterialSwitch.prototype.disable = function() {
+  this.inputElement_.disabled = true;
+  this.updateClasses_();
+};
 
-      var focusHelper = document.createElement('span');
-      focusHelper.classList.add(this.CssClasses_.FOCUS_HELPER);
+/**
+ * Enable switch.
+ *
+ * @public
+ */
+material.MaterialSwitch.prototype.enable = function() {
+  this.inputElement_.disabled = false;
+  this.updateClasses_();
+};
 
-      thumb.appendChild(focusHelper);
+/**
+ * Activate switch.
+ *
+ * @public
+ */
+material.MaterialSwitch.prototype.on = function() {
+  this.inputElement_.checked = true;
+  this.updateClasses_();
+};
 
-      this.element_.appendChild(track);
-      this.element_.appendChild(thumb);
+/**
+ * Deactivate switch.
+ *
+ * @public
+ */
+material.MaterialSwitch.prototype.off = function() {
+  this.inputElement_.checked = false;
+  this.updateClasses_();
+};
 
-      this.boundMouseUpHandler = this.onMouseUp_.bind(this);
-
-      if (this.element_.classList.contains(
-          this.CssClasses_.RIPPLE_EFFECT)) {
-        this.element_.classList.add(
-            this.CssClasses_.RIPPLE_IGNORE_EVENTS);
-        this.rippleContainerElement_ = document.createElement('span');
-        this.rippleContainerElement_.classList.add(
-            this.CssClasses_.RIPPLE_CONTAINER);
-        this.rippleContainerElement_.classList.add(this.CssClasses_.RIPPLE_EFFECT);
-        this.rippleContainerElement_.classList.add(this.CssClasses_.RIPPLE_CENTER);
-        this.rippleContainerElement_.addEventListener('mouseup', this.boundMouseUpHandler);
-
-        var ripple = document.createElement('span');
-        ripple.classList.add(this.CssClasses_.RIPPLE);
-
-        this.rippleContainerElement_.appendChild(ripple);
-        this.element_.appendChild(this.rippleContainerElement_);
-      }
-
-      this.boundChangeHandler = this.onChange_.bind(this);
-      this.boundFocusHandler = this.onFocus_.bind(this);
-      this.boundBlurHandler = this.onBlur_.bind(this);
-
-      this.inputElement_.addEventListener('change', this.boundChangeHandler);
-      this.inputElement_.addEventListener('focus', this.boundFocusHandler);
-      this.inputElement_.addEventListener('blur', this.boundBlurHandler);
-      this.element_.addEventListener('mouseup', this.boundMouseUpHandler);
-
-      this.updateClasses_();
-      this.element_.classList.add('is-upgraded');
-    }
-  };
-
-  // The component registers itself. It can assume componentHandler is available
-  // in the global scope.
-  componentHandler.register({
-    constructor: MaterialSwitch,
-    classAsString: 'MaterialSwitch',
-    cssClass: 'mdl-js-switch',
-    widget: true
-  });
-})();
+// The component registers itself. It can assume componentHandler is available
+// in the global scope.
+componentHandler.register({
+  constructor: material.MaterialSwitch,
+  classAsString: 'MaterialSwitch',
+  cssClass: goog.getCssName('mdl-js-switch'),
+  widget: true
+});
