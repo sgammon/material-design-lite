@@ -46,17 +46,26 @@ material.MaterialProgress = function MaterialProgress(element) {
 
   // Initialize instance.
   let el = document.createElement(divName);
-  el.className = 'progressbar bar bar1';
+  el.className = [
+    goog.getCssName('progressbar'),
+    goog.getCssName('bar'),
+    goog.getCssName('bar1')].join(' ');
   this.element_.appendChild(el);
   this.progressbar_ = el;
 
   el = document.createElement(divName);
-  el.className = 'bufferbar bar bar2';
+  el.className = [
+    goog.getCssName('bufferbar'),
+    goog.getCssName('bar'),
+    goog.getCssName('bar2')].join(' ');
   this.element_.appendChild(el);
   this.bufferbar_ = el;
 
   el = document.createElement(divName);
-  el.className = 'auxbar bar bar3';
+  el.className = [
+    goog.getCssName('auxbar'),
+    goog.getCssName('bar'),
+    goog.getCssName('bar3')].join(' ');
   this.element_.appendChild(el);
   this.auxbar_ = el;
 
@@ -71,10 +80,11 @@ material.MaterialProgress = function MaterialProgress(element) {
  * Set the current progress of the progressbar.
  *
  * @param {number} p Percentage of the progress (0-100)
+ * @param {boolean=} opt_force Force the change even in indeterminate mode.
  * @public
  */
-material.MaterialProgress.prototype.setProgress = function(p) {
-  if (this.element_.classList.contains(INDETERMINATE_CLASS)) {
+material.MaterialProgress.prototype.setProgress = function(p, opt_force) {
+  if (!!opt_force && this.element_.classList.contains(INDETERMINATE_CLASS)) {
     return;
   }
 
