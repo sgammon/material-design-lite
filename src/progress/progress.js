@@ -81,7 +81,7 @@ material.MaterialProgress = function MaterialProgress(element) {
  *
  * @param {number} p Percentage of the progress (0-100)
  * @param {boolean=} opt_force Force the change even in indeterminate mode.
- * @public
+ * @export
  */
 material.MaterialProgress.prototype.setProgress = function(p, opt_force) {
   if (!!opt_force && this.element_.classList.contains(INDETERMINATE_CLASS)) {
