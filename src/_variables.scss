@@ -64,8 +64,8 @@
    We should be able to improve on this once CSS Font Loading L3 becomes more
    widely available.
 */
-$preferred_font: 'Roboto', 'Helvetica', 'Arial', sans-serif !default;
-$performance_font: 'Helvetica', 'Arial', sans-serif !default;
+$preferred_font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+$performance_font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 
 /* ==========  COLORS  ========== */
 
@@ -90,13 +90,28 @@ $image_path: '/images' !default;
 // * Saving server bandwidth sending the extra classes
 // * Save client computation against the classes
 // it is RECOMMENDED you set this to true.
-$trim-color-classes: false !default;
+$trim-color-classes: true;
 
 // Use color primarily for emphasis. Choose colors that fit with
 // your brand and provide good contrast between visual components.
-$color-primary: $palette-indigo-500 !default;
-$color-primary-dark: $palette-indigo-700 !default;
-$color-accent: $palette-pink-A200 !default;
+// -- Color Scheme
+$color-primary: $palette-light_green-400;
+$color-secondary: $palette-teal-200;
+$color-secondary-dark: $palette-teal-900;
+$color-primary-dark: $palette-light_green-900;
+$color-accent: $color-secondary;
+$color-surface: $palette-light_green-400;
+$bloombox-green-primary: #4c9d2f;
+
+$color-primary-shade-800: $palette-light_green-800;
+$color-primary-shade-700: $palette-light_green-700;
+$color-primary-shade-600: $palette-light_green-600;
+$color-primary-shade-500: $palette-light_green-500;
+
+$color-secondary-shade-800: $palette-teal-800;
+$color-secondary-shade-700: $palette-teal-700;
+$color-secondary-shade-600: $palette-teal-600;
+$color-secondary-shade-500: $palette-teal-500;
 
 // Our primary is dark, so use $color-dark-contrast for overlaid text.
 $color-primary-contrast: $color-dark-contrast !default;
@@ -140,7 +155,7 @@ $button-active-color: unquote("rgba(#{$palette-grey-500}, 0.40)") !default;
 $button-focus-color: unquote("rgba(#{$color-black}, 0.12)") !default;
 
 // Colored button colors.
-$button-primary-color-alt: unquote("rgb(#{$color-primary})") !default;
+$button-primary-color-alt: $bloombox-green-primary;
 $button-secondary-color-alt: unquote("rgb(#{$color-primary-contrast})") !default;
 $button-hover-color-alt: unquote("rgb(#{$color-primary})") !default;
 $button-active-color-alt: unquote("rgb(#{$color-primary})") !default;
@@ -244,10 +259,11 @@ $spinner-single-color: unquote("rgb(#{$color-primary})") !default;
 $input-text-background-color: transparent !default;
 $input-text-label-color: unquote("rgba(#{$color-black}, 0.26)") !default;
 $input-text-bottom-border-color: unquote("rgba(#{$color-black}, 0.12)") !default;
-$input-text-highlight-color: unquote("rgb(#{$color-primary})") !default;
+$input-text-highlight-color: $bloombox-green-primary;
 $input-text-disabled-color: $input-text-bottom-border-color !default;
 $input-text-disabled-text-color: $input-text-label-color !default;
 $input-text-error-color: unquote("rgb(#{$palette-red-A700})") !default;
+$input-underline-color: $input-text-highlight-color;
 
 /* ==========  Card  ========== */
 
@@ -589,4 +605,4 @@ $tooltip-font-size-large: 14px !default;
 $chip-bg-color: rgb(222, 222, 222) !default;
 $chip-bg-active-color: rgb(214, 214, 214) !default;
 $chip-height: 32px !default;
-$chip-font-size: 13px !default; 
+$chip-font-size: 13px !default;
