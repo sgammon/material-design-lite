@@ -456,6 +456,7 @@ material.MaterialMenu.prototype.show = function(evt) {
       this.element_.classList.add(MaterialMenuCssClasses_.IS_ANIMATING);
       this.element_.style.clip = 'rect(0 ' + width + 'px ' + height + 'px 0)';
       this.container_.classList.add(MaterialMenuCssClasses_.IS_VISIBLE);
+      this.container_.parentElement.classList.add(MaterialMenuCssClasses_.IS_VISIBLE);
     }.bind(this));
 
     // Clean up after the animation is complete.
@@ -508,6 +509,7 @@ material.MaterialMenu.prototype.hide = function() {
     this.element_.classList.add(MaterialMenuCssClasses_.IS_ANIMATING);
     this.applyClip_(height, width);
     this.container_.classList.remove(MaterialMenuCssClasses_.IS_VISIBLE);
+    this.container_.parentElement.classList.remove(MaterialMenuCssClasses_.IS_VISIBLE);
 
     // Clean up after the animation is complete.
     this.addAnimationEndListener_();
