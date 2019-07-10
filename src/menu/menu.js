@@ -81,6 +81,7 @@ const MaterialMenuCssClasses_ = {
   RIPPLE_EFFECT: goog.getCssName('mdl-js-ripple-effect'),
   RIPPLE_IGNORE_EVENTS: goog.getCssName('mdl-js-ripple-effect--ignore-events'),
   RIPPLE: goog.getCssName('mdl-ripple'),
+  WRAPPER: goog.getCssName('mdl-menu--wrapper'),
   // Statuses
   IS_UPGRADED: goog.getCssName('is-upgraded'),
   IS_VISIBLE: goog.getCssName('is-visible'),
@@ -456,7 +457,9 @@ material.MaterialMenu.prototype.show = function(evt) {
       this.element_.classList.add(MaterialMenuCssClasses_.IS_ANIMATING);
       this.element_.style.clip = 'rect(0 ' + width + 'px ' + height + 'px 0)';
       this.container_.classList.add(MaterialMenuCssClasses_.IS_VISIBLE);
-      this.container_.parentElement.classList.add(MaterialMenuCssClasses_.IS_VISIBLE);
+      if (this.container_.parentElement.classList.contains(MaterialMenuCssClasses_.WRAPPER)) {
+        this.container_.parentElement.classList.add(MaterialMenuCssClasses_.IS_VISIBLE);
+      }
     }.bind(this));
 
     // Clean up after the animation is complete.
@@ -509,7 +512,9 @@ material.MaterialMenu.prototype.hide = function() {
     this.element_.classList.add(MaterialMenuCssClasses_.IS_ANIMATING);
     this.applyClip_(height, width);
     this.container_.classList.remove(MaterialMenuCssClasses_.IS_VISIBLE);
-    this.container_.parentElement.classList.remove(MaterialMenuCssClasses_.IS_VISIBLE);
+    if (this.container_.parentElement.classList.contains(MaterialMenuCssClasses_.WRAPPER)) {
+      this.container_.parentElement.classList.remove(MaterialMenuCssClasses_.IS_VISIBLE);
+    }
 
     // Clean up after the animation is complete.
     this.addAnimationEndListener_();

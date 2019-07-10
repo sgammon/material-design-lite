@@ -17,6 +17,8 @@
 @import "../variables";
 @import "../mixins";
 
+@keyframes turnNegative90 { 100% { transform: translate(-12px, -12px) rotate(-90deg); } }
+
 .mdl-menu__container {
   display: block;
   margin: 0;
@@ -72,6 +74,29 @@
 
   &.mdl-menu--top-right {
     transform-origin: 100% 100%;
+  }
+}
+
+.mdl-menu--wrapper {
+  .mdl-menu--arrow-left-to-down,
+  .mdl-menu--arrow-right-to-down {
+    transition-property: transform;
+    transition-duration: 0.25s;
+    transition-timing-function: ease-out;
+  }
+
+  &.is-visible {
+    .mdl-button {
+      .mdl-menu--arrow-left-to-down {
+        // rotate left-facing arrow downward
+        transform: translate(-12px, -12px) rotate(-90deg);
+      }
+
+      .mdl-menu--arrow-right-to-down {
+        // rotate right-facing arrow downward
+        transform: translate(-12px, -12px) rotate(90deg);
+      }
+    }
   }
 }
 
