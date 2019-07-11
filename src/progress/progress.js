@@ -109,6 +109,6 @@ material.MaterialProgress.prototype.setBuffer = function(p) {
 componentHandler.register({
   constructor: material.MaterialProgress,
   classAsString: 'MaterialProgress',
-  cssClass: 'mdl-js-progress',
+  cssClass: goog.getCssName('mdl-js-progress'),
   widget: true
 });
