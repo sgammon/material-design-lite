@@ -24,16 +24,6 @@ goog.provide('material.MaterialSpinner');
 
 
 /**
- * Spinner layer count.
- *
- * @const
- * @private
- * @type {number}
- */
-const MDL_SPINNER_LAYER_COUNT = 4;
-
-
-/**
  * Class constructor for Spinner MDL component.
  * Implements MDL component design pattern defined at:
  * https://github.com/jasonmayes/mdl-component-design-pattern
@@ -44,9 +34,10 @@ const MDL_SPINNER_LAYER_COUNT = 4;
 material.MaterialSpinner = function MaterialSpinner(element) {
   this.element_ = element;
 
-  for (let i = 1; i <= MDL_SPINNER_LAYER_COUNT; i++) {
-    this.createLayer(i);
-  }
+  this.createLayer(1, MaterialSpinnerCssClasses_.MDL_SPINNER_LAYER_1);
+  this.createLayer(2, MaterialSpinnerCssClasses_.MDL_SPINNER_LAYER_2);
+  this.createLayer(3, MaterialSpinnerCssClasses_.MDL_SPINNER_LAYER_3);
+  this.createLayer(4, MaterialSpinnerCssClasses_.MDL_SPINNER_LAYER_4);
   this.element_.classList.add(goog.getCssName('is-upgraded'));
 };
 
@@ -64,19 +55,24 @@ const MaterialSpinnerCssClasses_ = {
   MDL_SPINNER_CIRCLE: goog.getCssName('mdl-spinner__circle'),
   MDL_SPINNER_GAP_PATCH: goog.getCssName('mdl-spinner__gap-patch'),
   MDL_SPINNER_LEFT: goog.getCssName('mdl-spinner__left'),
-  MDL_SPINNER_RIGHT: goog.getCssName('mdl-spinner__right')
+  MDL_SPINNER_RIGHT: goog.getCssName('mdl-spinner__right'),
+  MDL_SPINNER_LAYER_1: goog.getCssName('mdl-spinner__layer-1'),
+  MDL_SPINNER_LAYER_2: goog.getCssName('mdl-spinner__layer-2'),
+  MDL_SPINNER_LAYER_3: goog.getCssName('mdl-spinner__layer-3'),
+  MDL_SPINNER_LAYER_4: goog.getCssName('mdl-spinner__layer-4')
 };
 
 /**
  * Auxiliary method to create a spinner layer.
  *
  * @param {number} index Index of the layer to be created.
+ * @param {!string} spinnerLayerClass Name of the class for this spinner layer.
  * @public
  */
-material.MaterialSpinner.prototype.createLayer = function(index) {
+material.MaterialSpinner.prototype.createLayer = function(index, spinnerLayerClass) {
   const layer = document.createElement(goog.dom.TagName.DIV.toString());
   layer.classList.add(MaterialSpinnerCssClasses_.MDL_SPINNER_LAYER);
-  layer.classList.add(MaterialSpinnerCssClasses_.MDL_SPINNER_LAYER + '-' + index);
+  layer.classList.add(spinnerLayerClass);
 
   const leftClipper = document.createElement(goog.dom.TagName.DIV.toString());
   leftClipper.classList.add(MaterialSpinnerCssClasses_.MDL_SPINNER_CIRCLE_CLIPPER);
