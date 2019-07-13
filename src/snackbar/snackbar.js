@@ -17,6 +17,7 @@
 /* global goog */
 
 goog.require('componentHandler.register');
+goog.require('componentHandler.xid');
 goog.require('goog.events.EventType');
 
 goog.provide('material.MaterialSnackbar');
@@ -286,7 +287,7 @@ material.MaterialSnackbar.prototype.setActionHidden_ = function(value) {
 
 componentHandler.register({
   constructor: material.MaterialSnackbar,
-  classAsString: 'MaterialSnackbar',
+  classAsString: componentHandler.xid('MaterialSnackbar'),
   cssClass: goog.getCssName('mdl-js-snackbar'),
   widget: true
 });

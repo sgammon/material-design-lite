@@ -18,6 +18,7 @@
 goog.provide('material.MaterialRadio');
 
 goog.require('componentHandler.register');
+goog.require('componentHandler.xid');
 goog.require('goog.events.EventType');
 
 
@@ -272,7 +273,7 @@ material.MaterialRadio.prototype.uncheck = function() {
 // in the global scope.
 componentHandler.register({
   constructor: material.MaterialRadio,
-  classAsString: 'MaterialRadio',
+  classAsString: componentHandler.xid('MaterialRadio'),
   cssClass: goog.getCssName('mdl-js-radio'),
   widget: true
 });

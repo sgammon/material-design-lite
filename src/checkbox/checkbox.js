@@ -18,6 +18,7 @@
 /* global goog */
 
 goog.require('componentHandler.register');
+goog.require('componentHandler.xid');
 goog.require('goog.dom.TagName');
 goog.require('goog.events.EventType');
 
@@ -272,7 +273,7 @@ material.MaterialCheckbox.prototype.uncheck = function() {
 
 componentHandler.register({
   constructor: material.MaterialCheckbox,
-  classAsString: 'MaterialCheckbox',
+  classAsString: componentHandler.xid('MaterialCheckbox'),
   cssClass: goog.getCssName('mdl-js-checkbox'),
   widget: true
 });

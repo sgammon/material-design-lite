@@ -16,6 +16,7 @@
  */
 
 goog.require('componentHandler.register');
+goog.require('componentHandler.xid');
 goog.require('goog.dom.TagName');
 goog.require('goog.events.EventType');
 
@@ -698,6 +699,6 @@ material.MaterialLayoutTab = function MaterialLayoutTab(tab, tabs, panels, layou
 // in the global scope.
 componentHandler.register({
   constructor: material.MaterialLayout,
-  classAsString: 'MaterialLayout',
+  classAsString: componentHandler.xid('MaterialLayout'),
   cssClass: goog.getCssName('mdl-js-layout')
 });

@@ -16,6 +16,7 @@
  */
 
 goog.require('componentHandler.register');
+goog.require('componentHandler.xid');
 goog.require('goog.events.EventType');
 
 goog.provide('material.MaterialTextField');
@@ -292,7 +293,7 @@ material.MaterialTextField.prototype.change = function(value) {
 
 componentHandler.register({
   constructor: material.MaterialTextField,
-  classAsString: 'MaterialTextField',
+  classAsString: componentHandler.xid('MaterialTextField'),
   cssClass: goog.getCssName('mdl-js-textfield'),
   widget: true
 });

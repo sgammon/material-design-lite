@@ -18,6 +18,7 @@
 /* global goog */
 
 goog.require('componentHandler.register');
+goog.require('componentHandler.xid');
 goog.require('goog.dom.TagName');
 
 goog.provide('material.MaterialSpinner');
@@ -128,7 +129,7 @@ material.MaterialSpinner.prototype.start = function() {
 
 componentHandler.register({
   constructor: material.MaterialSpinner,
-  classAsString: 'MaterialSpinner',
+  classAsString: componentHandler.xid('MaterialSpinner'),
   cssClass: goog.getCssName('mdl-js-spinner'),
   widget: true
 });

@@ -18,6 +18,7 @@
 /* global goog */
 
 goog.require('componentHandler.register');
+goog.require('componentHandler.xid');
 goog.require('goog.events.EventType');
 
 goog.provide('material.MaterialTooltip');
@@ -150,6 +151,6 @@ material.MaterialTooltip.prototype.hideTooltip_ = function() {
 
 componentHandler.register({
   constructor: material.MaterialTooltip,
-  classAsString: 'MaterialTooltip',
+  classAsString: componentHandler.xid('MaterialTooltip'),
   cssClass: goog.getCssName('mdl-tooltip')
 });

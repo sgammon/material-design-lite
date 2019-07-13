@@ -18,6 +18,7 @@
 goog.provide('material.MaterialSlider');
 
 goog.require('componentHandler.register');
+goog.require('componentHandler.xid');
 goog.require('goog.events.EventType');
 
 
@@ -226,7 +227,7 @@ material.MaterialSlider.prototype.change = function(value) {
 // in the global scope.
 componentHandler.register({
   constructor: material.MaterialSlider,
-  classAsString: 'MaterialSlider',
+  classAsString: componentHandler.xid('MaterialSlider'),
   cssClass: goog.getCssName('mdl-js-slider'),
   widget: true
 });

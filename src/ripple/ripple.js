@@ -18,6 +18,7 @@
 /* global goog */
 
 goog.require('componentHandler.register');
+goog.require('componentHandler.xid');
 goog.require('goog.events.EventType');
 
 goog.provide('material.MaterialRipple');
@@ -300,7 +301,7 @@ material.MaterialRipple.prototype.upHandler_ = function(event) {
 
 componentHandler.register({
   constructor: material.MaterialRipple,
-  classAsString: 'MaterialRipple',
+  classAsString: componentHandler.xid('MaterialRipple'),
   cssClass: goog.getCssName('mdl-js-ripple'),
   widget: true
 });

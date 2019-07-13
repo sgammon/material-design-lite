@@ -18,6 +18,7 @@
 /* global goog */
 
 goog.require('componentHandler.register');
+goog.require('componentHandler.xid');
 goog.require('goog.dom.TagName');
 goog.require('goog.events.EventType');
 
@@ -538,7 +539,7 @@ material.MaterialMenu.prototype.toggle = function(evt) {
 
 componentHandler.register({
   constructor: material.MaterialMenu,
-  classAsString: 'MaterialMenu',
+  classAsString: componentHandler.xid('MaterialMenu'),
   cssClass: goog.getCssName('mdl-js-menu'),
   widget: true
 });

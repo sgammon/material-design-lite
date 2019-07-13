@@ -18,6 +18,7 @@
 /* global goog */
 
 goog.require('componentHandler.register');
+goog.require('componentHandler.xid');
 goog.require('goog.dom.TagName');
 goog.require('goog.events.EventType');
 goog.require('material.MaterialCheckbox');
@@ -227,6 +228,6 @@ material.MaterialDataTable.prototype.createCheckbox_ = function(row, opt_rows) {
 
 componentHandler.register({
   constructor: material.MaterialDataTable,
-  classAsString: 'MaterialDataTable',
+  classAsString: componentHandler.xid('MaterialDataTable'),
   cssClass: goog.getCssName('mdl-js-data-table')
 });

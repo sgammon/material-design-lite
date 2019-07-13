@@ -16,6 +16,7 @@
  */
 
 goog.require('componentHandler.register');
+goog.require('componentHandler.xid');
 goog.require('goog.dom.TagName');
 goog.require('goog.events.EventType');
 
@@ -265,7 +266,7 @@ material.MaterialIconToggle.prototype.uncheck = function() {
 // in the global scope.
 componentHandler.register({
   constructor: material.MaterialIconToggle,
-  classAsString: 'MaterialIconToggle',
+  classAsString: componentHandler.xid('MaterialIconToggle'),
   cssClass: goog.getCssName('mdl-js-icon-toggle'),
   widget: true
 });

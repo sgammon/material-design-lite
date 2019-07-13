@@ -18,6 +18,7 @@
 /* global goog */
 
 goog.require('componentHandler.register');
+goog.require('componentHandler.xid');
 goog.require('goog.dom.TagName');
 goog.require('goog.events.EventType');
 
@@ -182,7 +183,7 @@ material.MaterialTab = function MaterialTab(tab, ctx, container) {
 
 componentHandler.register({
   constructor: material.MaterialTabs,
-  classAsString: 'MaterialTabs',
+  classAsString: componentHandler.xid('MaterialTabs'),
   cssClass: goog.getCssName('mdl-js-tabs'),
   widget: true
 });

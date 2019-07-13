@@ -16,6 +16,7 @@
  */
 
 goog.require('componentHandler.register');
+goog.require('componentHandler.xid');
 goog.require('goog.events.EventType');
 goog.require('goog.dom.TagName');
 goog.require('material.MaterialRipple');
@@ -141,7 +142,7 @@ material.MaterialButton.prototype.enable = function() {
 
 componentHandler.register({
   constructor: material.MaterialButton,
-  classAsString: 'MaterialButton',
+  classAsString: componentHandler.xid('MaterialButton'),
   cssClass: goog.getCssName('mdl-js-button'),
   widget: true
 });

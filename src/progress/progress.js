@@ -18,6 +18,7 @@
 goog.provide('material.MaterialProgress');
 
 goog.require('componentHandler.register');
+goog.require('componentHandler.xid');
 goog.require('goog.dom.TagName');
 
 
@@ -108,7 +109,7 @@ material.MaterialProgress.prototype.setBuffer = function(p) {
 // in the global scope.
 componentHandler.register({
   constructor: material.MaterialProgress,
-  classAsString: 'MaterialProgress',
+  classAsString: componentHandler.xid('MaterialProgress'),
   cssClass: goog.getCssName('mdl-js-progress'),
   widget: true
 });

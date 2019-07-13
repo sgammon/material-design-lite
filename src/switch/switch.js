@@ -18,6 +18,7 @@
 goog.provide('material.MaterialSwitch');
 
 goog.require('componentHandler.register');
+goog.require('componentHandler.xid');
 goog.require('goog.events.EventType');
 
 
@@ -287,7 +288,7 @@ material.MaterialSwitch.prototype.off = function() {
 // in the global scope.
 componentHandler.register({
   constructor: material.MaterialSwitch,
-  classAsString: 'MaterialSwitch',
+  classAsString: componentHandler.xid('MaterialSwitch'),
   cssClass: goog.getCssName('mdl-js-switch'),
   widget: true
 });

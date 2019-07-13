@@ -33,6 +33,7 @@ goog.provide('componentHandler.upgradeAllRegistered');
 goog.provide('componentHandler.upgradeDom');
 goog.provide('componentHandler.upgradeElement');
 goog.provide('componentHandler.upgradeElements');
+goog.provide('componentHandler.xid');
 goog.provide('util.componentHandler.Component');
 goog.provide('util.componentHandler.ComponentConfig');
 goog.provide('util.componentHandler.ComponentConfigPublic');
@@ -297,6 +298,18 @@ componentHandler.register = function registerInternal(config) {
   if (!found) {
     registeredComponents_.push(newConfig);
   }
+};
+
+/**
+ * Generate an ID for a given component name.
+ *
+ * @idGenerator {consistent}
+ * @param {!string} id Component name, un-transformed.
+ * @return {!string} Original, or transformed, ID, depending on compilation
+ * settings (in prod mode, it's rewritten).
+ */
+componentHandler.xid = function(id) {
+  return id;
 };
 
 /**
