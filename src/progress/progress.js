@@ -46,29 +46,44 @@ material.MaterialProgress = function MaterialProgress(element) {
   this.element_ = element;
 
   // Initialize instance.
-  let el = document.createElement(divName);
-  el.className = [
-    goog.getCssName('progressbar'),
-    goog.getCssName('bar'),
-    goog.getCssName('bar1')].join(' ');
-  this.element_.appendChild(el);
-  this.progressbar_ = el;
+  const existingProgress = element.querySelector('.' + goog.getCssName('bar1'));
+  if (!existingProgress) {
+    let el = document.createElement(divName);
+    el.className = [
+      goog.getCssName('progressbar'),
+      goog.getCssName('bar'),
+      goog.getCssName('bar1')].join(' ');
+    this.element_.appendChild(el);
+    this.progressbar_ = el;
+  } else {
+    this.progressbar_ = existingProgress;
+  }
 
-  el = document.createElement(divName);
-  el.className = [
-    goog.getCssName('bufferbar'),
-    goog.getCssName('bar'),
-    goog.getCssName('bar2')].join(' ');
-  this.element_.appendChild(el);
-  this.bufferbar_ = el;
+  const existingBuffer = element.querySelector('.' + goog.getCssName('bar2'));
+  if (!existingBuffer) {
+    let el = document.createElement(divName);
+    el.className = [
+      goog.getCssName('bufferbar'),
+      goog.getCssName('bar'),
+      goog.getCssName('bar2')].join(' ');
+    this.element_.appendChild(el);
+    this.bufferbar_ = el;
+  } else {
+    this.bufferbar_ = existingBuffer;
+  }
 
-  el = document.createElement(divName);
-  el.className = [
-    goog.getCssName('auxbar'),
-    goog.getCssName('bar'),
-    goog.getCssName('bar3')].join(' ');
-  this.element_.appendChild(el);
-  this.auxbar_ = el;
+  const existingAux = element.querySelector('.' + goog.getCssName('bar3'));
+  if (!existingAux) {
+    let el = document.createElement(divName);
+    el.className = [
+      goog.getCssName('auxbar'),
+      goog.getCssName('bar'),
+      goog.getCssName('bar3')].join(' ');
+    this.element_.appendChild(el);
+    this.auxbar_ = el;
+  } else {
+    this.auxbar_ = existingAux;
+  }
 
   this.progressbar_.style.width = '0%';
   this.bufferbar_.style.width = '100%';
