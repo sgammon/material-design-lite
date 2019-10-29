@@ -92,32 +92,66 @@ material.MaterialRadio = function MaterialRadio(element) {
    * @const */
   this.boundMouseUpHandler_ = this.onMouseup_.bind(this);
 
-  const outerCircle = document.createElement('span');
-  outerCircle.classList.add(MaterialRadioCssClasses_.RADIO_OUTER_CIRCLE);
+  let outerCircle;
+  const spanOuter = this.element_.getElementsByClassName(MaterialRadioCssClasses_.RADIO_OUTER_CIRCLE);
+  if (spanOuter !== null && spanOuter.length > 0) {
+    outerCircle = spanOuter.item(0);
+  } else {
+    outerCircle = document.createElement('span');
+    outerCircle.classList.add(MaterialRadioCssClasses_.RADIO_OUTER_CIRCLE);
+    this.element_.appendChild(outerCircle);
+  }
 
-  const innerCircle = document.createElement('span');
-  innerCircle.classList.add(MaterialRadioCssClasses_.RADIO_INNER_CIRCLE);
-
-  this.element_.appendChild(outerCircle);
-  this.element_.appendChild(innerCircle);
+  let innerCircle;
+  const spanInner = this.element_.getElementsByClassName(MaterialRadioCssClasses_.RADIO_INNER_CIRCLE);
+  if (spanInner !== null && spanInner.length > 0) {
+    innerCircle = spanInner.item(0);
+  } else {
+    innerCircle = document.createElement('span');
+    innerCircle.classList.add(MaterialRadioCssClasses_.RADIO_INNER_CIRCLE);
+    this.element_.appendChild(innerCircle);
+  }
 
   let rippleContainer;
   if (this.element_.classList.contains(
     MaterialRadioCssClasses_.RIPPLE_EFFECT)) {
-    this.element_.classList.add(
-      MaterialRadioCssClasses_.RIPPLE_IGNORE_EVENTS);
-    rippleContainer = document.createElement('span');
-    rippleContainer.classList.add(
+    if (!this.element_.classList.contains(MaterialRadioCssClasses_.RIPPLE_IGNORE_EVENTS)) {
+      this.element_.classList.add(
+        MaterialRadioCssClasses_.RIPPLE_IGNORE_EVENTS);
+    }
+    let didCreateRipple = false;
+    const spanRipple = this.element_.getElementsByClassName(
       MaterialRadioCssClasses_.RIPPLE_CONTAINER);
-    rippleContainer.classList.add(MaterialRadioCssClasses_.RIPPLE_EFFECT);
-    rippleContainer.classList.add(MaterialRadioCssClasses_.RIPPLE_CENTER);
+    if (spanRipple !== null && spanRipple.length > 0) {
+      rippleContainer = spanRipple.item(0);
+    } else {
+      didCreateRipple = true;
+      rippleContainer = document.createElement('span');
+    }
+    if (!rippleContainer.classList.contains(MaterialRadioCssClasses_.RIPPLE_CONTAINER))
+      rippleContainer.classList.add(MaterialRadioCssClasses_.RIPPLE_CONTAINER);
+    if (!rippleContainer.classList.contains(MaterialRadioCssClasses_.RIPPLE_EFFECT))
+      rippleContainer.classList.add(MaterialRadioCssClasses_.RIPPLE_EFFECT);
+    if (!rippleContainer.classList.contains(MaterialRadioCssClasses_.RIPPLE_CENTER))
+      rippleContainer.classList.add(MaterialRadioCssClasses_.RIPPLE_CENTER);
+
     rippleContainer.addEventListener(goog.events.EventType.MOUSEUP, this.boundMouseUpHandler_);
 
-    const ripple = document.createElement('span');
-    ripple.classList.add(MaterialRadioCssClasses_.RIPPLE);
+    let ripple;
+    const rippleInnerSpan = rippleContainer
+        .getElementsByClassName(MaterialRadioCssClasses_.RIPPLE);
+    if (rippleInnerSpan !== null && rippleInnerSpan.length > 0) {
+      ripple = rippleInnerSpan.item(0);
+    } else {
+      ripple = document.createElement('span');
+    }
+    if (!ripple.classList.contains(MaterialRadioCssClasses_.RIPPLE))
+      ripple.classList.add(MaterialRadioCssClasses_.RIPPLE);
 
-    rippleContainer.appendChild(ripple);
-    this.element_.appendChild(rippleContainer);
+    if (didCreateRipple) {
+      rippleContainer.appendChild(ripple);
+      this.element_.appendChild(rippleContainer);
+    }
   }
 
   this.btnElement_.addEventListener(goog.events.EventType.CHANGE, this.boundChangeHandler_);
