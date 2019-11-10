@@ -86,6 +86,9 @@ material.MaterialRipple = function MaterialRipple(element) {
   this.rippleElement_ = this.element_.classList.contains(
       MaterialRippleClasses_.RIPPLE_EFFECT_IGNORE_EVENTS) ? null : /** @type {!HTMLElement} */ (
         this.element_.querySelector('.' + MaterialRippleClasses_.RIPPLE));
+  if (!this.rippleElement_) {
+    console.warn('[MDL]: Ripple failed to resolve inner element.', this.element_);
+  }
 
   /**
    * @private
