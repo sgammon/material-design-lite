@@ -302,6 +302,6 @@ material.MaterialRipple.prototype.upHandler_ = function(event) {
 componentHandler.register({
   constructor: material.MaterialRipple,
   classAsString: componentHandler.xid('MaterialRipple'),
-  cssClass: goog.getCssName('mdl-js-ripple'),
+  cssClass: goog.getCssName('mdl-js-ripple-effect'),
   widget: true
 });
