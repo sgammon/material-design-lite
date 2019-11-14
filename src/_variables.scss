@@ -95,23 +95,30 @@ $trim-color-classes: true;
 // Use color primarily for emphasis. Choose colors that fit with
 // your brand and provide good contrast between visual components.
 // -- Color Scheme
-$color-primary: $palette-light_green-400;
-$color-secondary: $palette-teal-200;
-$color-secondary-dark: $palette-teal-900;
-$color-primary-dark: $palette-light_green-900;
-$color-accent: $color-secondary;
-$color-surface: $palette-light_green-400;
-$bloombox-green-primary: #4c9d2f;
+// -- Color Scheme
+$color-primary: #039be5;
+$color-secondary: #43a047;
+$color-primary-light: #63ccff;
+$color-primary-dark: #006db3;
+$color-secondary-light: #76d275;
+$color-secondary-dark: #00701a;
+$color-accent: $color-secondary-light;
+$color-surface: $color-primary;
+$bloombox-green-primary: $color-primary;
+$navigation-background: transparent;
+$navigation-link-text: #333;
+$navigation-header-link-text: #fefefe;
+$color-verified: unquote("rgb(#{$palette-green-500})");
 
-$color-primary-shade-800: $palette-light_green-800;
-$color-primary-shade-700: $palette-light_green-700;
-$color-primary-shade-600: $palette-light_green-600;
-$color-primary-shade-500: $palette-light_green-500;
+$color-primary-shade-800: $palette-light_blue-800;
+$color-primary-shade-700: $palette-light_blue-700;
+$color-primary-shade-600: $palette-light_blue-600;
+$color-primary-shade-500: $palette-light_blue-500;
 
-$color-secondary-shade-800: $palette-teal-800;
-$color-secondary-shade-700: $palette-teal-700;
-$color-secondary-shade-600: $palette-teal-600;
-$color-secondary-shade-500: $palette-teal-500;
+$color-secondary-shade-800: $palette-green-800;
+$color-secondary-shade-700: $palette-green-700;
+$color-secondary-shade-600: $palette-green-600;
+$color-secondary-shade-500: $palette-green-500;
 
 // Our primary is dark, so use $color-dark-contrast for overlaid text.
 $color-primary-contrast: $color-dark-contrast !default;
@@ -133,8 +140,8 @@ $color-accent-contrast: $color-dark-contrast !default;
 // text-color-secondary. For light themes, use text-color-primary-inverse
 // and text-color-secondary-inverse.
 
-$text-color-primary: unquote("rgba(#{$color-black}, 0.87)") !default;
-$text-link-color: unquote("rgb(#{$color-accent})") !default;
+$text-color-primary: #212121 !default;
+$text-link-color: #039be5 !default;
 
 // Define whether to target elements directly for typographic enhancements.
 // Turning this off means you need to use mdl-* classes more often.
