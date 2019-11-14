@@ -104,7 +104,7 @@ $color-secondary-light: "118, 210, 117";
 $color-secondary-dark: "0, 112, 26";
 $color-accent: $color-secondary-light;
 $color-surface: $color-primary;
-$bloombox-green-primary: unquote("#{$color-primary}");
+$bloombox-green-primary: unquote("rgb(#{$color-primary})");
 $navigation-background: transparent;
 $navigation-link-text: #333;
 $navigation-header-link-text: #fefefe;
