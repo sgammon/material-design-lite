@@ -96,12 +96,12 @@ $trim-color-classes: true;
 // your brand and provide good contrast between visual components.
 // -- Color Scheme
 // -- Color Scheme
-$color-primary: #039be5;
-$color-secondary: #43a047;
-$color-primary-light: #63ccff;
-$color-primary-dark: #006db3;
-$color-secondary-light: #76d275;
-$color-secondary-dark: #00701a;
+$color-primary: "3, 155, 229";
+$color-secondary: "67, 160, 71";
+$color-primary-light: "99, 204, 255";
+$color-primary-dark: "0, 109, 179";
+$color-secondary-light: "118, 210, 117";
+$color-secondary-dark: "0, 112, 26";
 $color-accent: $color-secondary-light;
 $color-surface: $color-primary;
 $bloombox-green-primary: $color-primary;
