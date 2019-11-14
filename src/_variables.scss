@@ -96,29 +96,29 @@ $trim-color-classes: true;
 // your brand and provide good contrast between visual components.
 // -- Color Scheme
 // -- Color Scheme
-$color-primary: "3, 155, 229";
-$color-secondary: "67, 160, 71";
-$color-primary-light: "99, 204, 255";
-$color-primary-dark: "0, 109, 179";
-$color-secondary-light: "118, 210, 117";
-$color-secondary-dark: "0, 112, 26";
-$color-accent: $color-secondary-light;
-$color-surface: $color-primary;
-$bloombox-green-primary: unquote("rgb(#{$color-primary})");
-$navigation-background: transparent;
-$navigation-link-text: #333;
-$navigation-header-link-text: #fefefe;
-$color-verified: unquote("rgb(#{$palette-green-500})");
+$color-primary: "3, 155, 229" !default;
+$color-secondary: "67, 160, 71" !default;
+$color-primary-light: "99, 204, 255" !default;
+$color-primary-dark: "0, 109, 179" !default;
+$color-secondary-light: "118, 210, 117" !default;
+$color-secondary-dark: "0, 112, 26" !default;
+$color-accent: $color-secondary-light !default;
+$color-surface: $color-primary !default;
+$bloombox-green-primary: unquote("rgb(#{$color-primary})") !default;
+$navigation-background: transparent !default;
+$navigation-link-text: #333 !default;
+$navigation-header-link-text: #fefefe !default;
+$color-verified: unquote("rgb(#{$palette-green-500})") !default;
 
-$color-primary-shade-800: $palette-light_blue-800;
-$color-primary-shade-700: $palette-light_blue-700;
-$color-primary-shade-600: $palette-light_blue-600;
-$color-primary-shade-500: $palette-light_blue-500;
+$color-primary-shade-800: $palette-light_blue-800 !default;
+$color-primary-shade-700: $palette-light_blue-700 !default;
+$color-primary-shade-600: $palette-light_blue-600 !default;
+$color-primary-shade-500: $palette-light_blue-500 !default;
 
-$color-secondary-shade-800: $palette-green-800;
-$color-secondary-shade-700: $palette-green-700;
-$color-secondary-shade-600: $palette-green-600;
-$color-secondary-shade-500: $palette-green-500;
+$color-secondary-shade-800: $palette-green-800 !default;
+$color-secondary-shade-700: $palette-green-700 !default;
+$color-secondary-shade-600: $palette-green-600 !default;
+$color-secondary-shade-500: $palette-green-500 !default;
 
 // Our primary is dark, so use $color-dark-contrast for overlaid text.
 $color-primary-contrast: $color-dark-contrast !default;
