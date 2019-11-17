@@ -103,7 +103,7 @@ $color-primary-dark: "0, 109, 179" !default;
 $color-secondary-light: "118, 210, 117" !default;
 $color-secondary-dark: "0, 112, 26" !default;
 $color-accent: $color-secondary-light !default;
-$color-surface: $color-primary !default;
+$color-surface: $color-primary-dark !default;
 $bloombox-green-primary: unquote("rgb(#{$color-primary})") !default;
 $navigation-background: transparent !default;
 $navigation-link-text: #333 !default;
