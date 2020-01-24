@@ -89,7 +89,6 @@ material.MaterialRipple = function MaterialRipple(element) {
   if (this.rippleElement_ === null && !this.element_.classList.contains(
     MaterialRippleClasses_.RIPPLE_EFFECT_IGNORE_EVENTS)) {
     console.error('[MDL]: Ripple inner element not found.', this.element_);
-    debugger;
   }
 
   /**
