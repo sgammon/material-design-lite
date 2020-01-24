@@ -61,18 +61,33 @@ material.MaterialButton = function MaterialButton(element) {
   // to facilitate the ripple, and instantiate the JavaScript object
   // that manages the ripple.
   if (this.element_.classList.contains(MaterialButtonClasses_.RIPPLE_EFFECT)) {
-    const rippleContainer = /** @type {!HTMLSpanElement} */ (
+    let rippleContainer = /** @type {?HTMLSpanElement} */ (
+      this.element_.querySelector('.' + MaterialButtonClasses_.RIPPLE_CONTAINER));
+    let rippleElement = /** @type {?HTMLSpanElement} */ (null);
+
+    if (!rippleContainer) {
+      rippleContainer = /** @type {!HTMLSpanElement} */ (
         document.createElement(goog.dom.TagName.SPAN.toString()));
-    const rippleElement = /** @type {!HTMLSpanElement} */ (
-      document.createElement(goog.dom.TagName.SPAN.toString()));
+      rippleElement = /** @type {!HTMLSpanElement} */ (
+        document.createElement(goog.dom.TagName.SPAN.toString()));
+      rippleContainer.classList.add(MaterialButtonClasses_.RIPPLE_CONTAINER);
+      rippleElement.classList.add(MaterialButtonClasses_.RIPPLE);
+      rippleContainer.appendChild(rippleElement);
+      this.element_.appendChild(rippleContainer);
+    } else {
+      rippleElement = /** @type {?HTMLSpanElement} */ (
+        rippleContainer.querySelector('.' + MaterialButtonClasses_.RIPPLE));
+      if (!rippleElement) {
+        rippleElement = /** @type {!HTMLSpanElement} */ (
+          document.createElement(goog.dom.TagName.SPAN.toString()));
+        rippleElement.classList.add(MaterialButtonClasses_.RIPPLE);
+        rippleContainer.appendChild(rippleElement);
+      }
+    }
 
-    rippleContainer.classList.add(MaterialButtonClasses_.RIPPLE_CONTAINER);
-    rippleElement.classList.add(MaterialButtonClasses_.RIPPLE);
-    rippleContainer.appendChild(rippleElement);
-
+    // bind blur handler
     this.boundRippleBlurHandler = this.blurHandler_.bind(this);
     rippleElement.addEventListener(goog.events.EventType.MOUSEUP, this.boundRippleBlurHandler);
-    this.element_.appendChild(rippleContainer);
 
     /**
      * Ripple effect inner element.

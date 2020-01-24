@@ -334,6 +334,7 @@ componentHandler.registerUpgradedCallback = function registerUpgradedCallbackInt
  * automatically called on window load.
  */
 componentHandler.upgradeAllRegistered = function upgradeAllRegisteredInternal() {
+  registeredComponents_.reverse();
   for (let n = 0; n < registeredComponents_.length; n++) {
     componentHandler.upgradeDom(registeredComponents_[n].className);
   }
