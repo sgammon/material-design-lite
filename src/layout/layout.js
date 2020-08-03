@@ -184,14 +184,19 @@ material.MaterialLayout = function MaterialLayout(element) {
    */
   this.element_ = element;
 
+  /** @type {HTMLElement|undefined} */
+  let container;
   if (!this.element_.parentElement ||
       !this.element_.parentElement.classList.contains(LayoutCssClasses_.CONTAINER)) {
     // add the container element and re-wrap
-    const container = document.createElement(goog.dom.TagName.DIV.toString());
-    container.classList.add(LayoutCssClasses_.CONTAINER);
-    this.element_.parentElement.insertBefore(container, this.element_);
+    const containerEl = document.createElement(goog.dom.TagName.DIV.toString());
+    containerEl.classList.add(LayoutCssClasses_.CONTAINER);
+    this.element_.parentElement.insertBefore(containerEl, this.element_);
     this.element_.parentElement.removeChild(this.element_);
-    container.appendChild(this.element_);
+    containerEl.appendChild(this.element_);
+    container = /** @type {!HTMLElement} */ (containerEl);
+  } else {
+    container = /** @type {!HTMLElement} */ (this.element_.parentElement);
   }
 
   const focusedElement = this.element_.querySelector(':focus');
