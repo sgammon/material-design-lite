@@ -42,12 +42,12 @@ goog.provide('util.componentHandler.bootMdl');
 
 /**
  * @private
- * @type {!Array<util.componentHandler.ComponentConfig>} */
+ * @type {!Array<!util.componentHandler.ComponentConfig>} */
 let registeredComponents_ = [];
 
 /**
  * @private
- * @type {!Array<util.componentHandler.Component>} */
+ * @type {!Array<!util.componentHandler.Component>} */
 let createdComponents_ = [];
 
 /**
