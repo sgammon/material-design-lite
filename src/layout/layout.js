@@ -192,8 +192,6 @@ material.MaterialLayout = function MaterialLayout(element) {
     this.element_.parentElement.insertBefore(container, this.element_);
     this.element_.parentElement.removeChild(this.element_);
     container.appendChild(this.element_);
-  } else {
-    const container = this.element_.parentElement;
   }
 
   const focusedElement = this.element_.querySelector(':focus');
