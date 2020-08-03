@@ -62,7 +62,7 @@ const RESIZE_TIMEOUT_ = 100;
  * @type {string}
  * @private
  */
-const MENU_ICON_ = '&#xE5D2;';
+const MENU_ICON_ = 'menu';
 
 
 /**
@@ -184,15 +184,19 @@ material.MaterialLayout = function MaterialLayout(element) {
    */
   this.element_ = element;
 
-  const container = document.createElement(goog.dom.TagName.DIV.toString());
-  container.classList.add(LayoutCssClasses_.CONTAINER);
+  if (!this.element_.parentElement ||
+      !this.element_.parentElement.classList.contains(LayoutCssClasses_.CONTAINER)) {
+    // add the container element and re-wrap
+    const container = document.createElement(goog.dom.TagName.DIV.toString());
+    container.classList.add(LayoutCssClasses_.CONTAINER);
+    this.element_.parentElement.insertBefore(container, this.element_);
+    this.element_.parentElement.removeChild(this.element_);
+    container.appendChild(this.element_);
+  } else {
+    const container = this.element_.parentElement;
+  }
 
   const focusedElement = this.element_.querySelector(':focus');
-
-  this.element_.parentElement.insertBefore(container, this.element_);
-  this.element_.parentElement.removeChild(this.element_);
-  container.appendChild(this.element_);
-
   if (focusedElement) {
     focusedElement.focus();
   }
