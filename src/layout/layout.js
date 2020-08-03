@@ -184,8 +184,8 @@ material.MaterialLayout = function MaterialLayout(element) {
    */
   this.element_ = element;
 
-  /** @type {HTMLElement|undefined} */
-  let container;
+  /** @type {?HTMLElement} */
+  let container = null;
   if (!this.element_.parentElement ||
       !this.element_.parentElement.classList.contains(LayoutCssClasses_.CONTAINER)) {
     // add the container element and re-wrap
