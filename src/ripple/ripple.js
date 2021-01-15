@@ -240,7 +240,8 @@ material.MaterialRipple = function MaterialRipple(element) {
  * @param {!MouseEvent|!TouchEvent} event The event that fired.
  */
 material.MaterialRipple.prototype.downHandler_ = function(event) {
-  if (!this.rippleElement_.style.width && !this.rippleElement_.style.height) {
+  if (!!this.rippleElement_
+      && !this.rippleElement_.style.width && !this.rippleElement_.style.height) {
     const rect = this.element_.getBoundingClientRect();
     this.boundHeight = rect.height;
     this.boundWidth = rect.width;
@@ -250,7 +251,9 @@ material.MaterialRipple.prototype.downHandler_ = function(event) {
     this.rippleElement_.style.height = this.rippleSize_ + 'px';
   }
 
-  this.rippleElement_.classList.add(MaterialRippleClasses_.IS_VISIBLE);
+  if (!!this.rippleElement_) {
+    this.rippleElement_.classList.add(MaterialRippleClasses_.IS_VISIBLE);
+  }
 
   if (event.type === goog.events.EventType.MOUSEDOWN && this.ignoringMouseDown_) {
     this.ignoringMouseDown_ = false;
@@ -297,11 +300,11 @@ material.MaterialRipple.prototype.upHandler_ = function(event) {
     // Allow a repaint to occur before removing this class, so the animation
     // shows for tap events, which seem to trigger a mouseup too soon after
     // mousedown.
-    setTimeout(function() {
-      if (!!this.rippleElement_) {
+    if (!!this.rippleElement_) {
+      setTimeout(function() {
         this.rippleElement_.classList.remove(MaterialRippleClasses_.IS_VISIBLE);
-      }
-    }.bind(this), 0);
+      }.bind(this), 0);
+    }
   }
 };
 
