@@ -192,7 +192,7 @@ material.MaterialRipple = function MaterialRipple(element) {
    * @param  {boolean} start whether or not this is the start frame.
    */
   this.setRippleStyles = function(start) {
-    if (this.rippleElement_ !== null) {
+    if (!!this.rippleElement_) {
       var transformString;
       var scale;
       var offset = 'translate(' + this.x_ + 'px, ' + this.y_ + 'px)';
