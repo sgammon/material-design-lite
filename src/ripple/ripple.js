@@ -298,7 +298,9 @@ material.MaterialRipple.prototype.upHandler_ = function(event) {
     // shows for tap events, which seem to trigger a mouseup too soon after
     // mousedown.
     setTimeout(function() {
-      this.rippleElement_.classList.remove(MaterialRippleClasses_.IS_VISIBLE);
+      if (!!this.rippleElement_) {
+        this.rippleElement_.classList.remove(MaterialRippleClasses_.IS_VISIBLE);
+      }
     }.bind(this), 0);
   }
 };
