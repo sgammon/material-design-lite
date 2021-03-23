@@ -51,14 +51,14 @@
 }
 
 // Webkit only
-@supports (-webkit-appearance:none) {
-  .mdl-progress:not(.mdl-progress--indeterminate):not(.mdl-progress--indeterminate) > .auxbar,
-  .mdl-progress:not(.mdl-progress__indeterminate):not(.mdl-progress__indeterminate) > .auxbar {
-    background-image: linear-gradient(to right, $progress-secondary-color, $progress-secondary-color),
-      linear-gradient(to right, $progress-main-color, $progress-main-color);
-    mask: url("data:image/svg+xml,%3C%3Fxml version='1.0'%3F%3E%3Csvg width='12' height='4' viewPort='0 0 12 4' version='1.1' xmlns='http://www.w3.org/2000/svg'%3E%3Cellipse cx='2' cy='2' rx='2' ry='2'%3E%3Canimate attributeName='cx' from='2' to='-10' dur='0.6s' repeatCount='indefinite' /%3E%3C/ellipse%3E%3Cellipse cx='14' cy='2' rx='2' ry='2' class='loader'%3E%3Canimate attributeName='cx' from='14' to='2' dur='0.6s' repeatCount='indefinite' /%3E%3C/ellipse%3E%3C/svg%3E%0A");
-  }
-}
+// @supports (-webkit-appearance:none) {
+//   .mdl-progress:not(.mdl-progress--indeterminate):not(.mdl-progress--indeterminate) > .auxbar,
+//   .mdl-progress:not(.mdl-progress__indeterminate):not(.mdl-progress__indeterminate) > .auxbar {
+//     background-image: linear-gradient(to right, $progress-secondary-color, $progress-secondary-color),
+//       linear-gradient(to right, $progress-main-color, $progress-main-color);
+//     mask: url("data:image/svg+xml,%3C%3Fxml version='1.0'%3F%3E%3Csvg width='12' height='4' viewPort='0 0 12 4' version='1.1' xmlns='http://www.w3.org/2000/svg'%3E%3Cellipse cx='2' cy='2' rx='2' ry='2'%3E%3Canimate attributeName='cx' from='2' to='-10' dur='0.6s' repeatCount='indefinite' /%3E%3C/ellipse%3E%3Cellipse cx='14' cy='2' rx='2' ry='2' class='loader'%3E%3Canimate attributeName='cx' from='14' to='2' dur='0.6s' repeatCount='indefinite' /%3E%3C/ellipse%3E%3C/svg%3E%0A");
+//   }
+// }
 
 .mdl-progress:not(.mdl-progress--indeterminate) > .auxbar,
 .mdl-progress:not(.mdl-progress__indeterminate) > .auxbar {
