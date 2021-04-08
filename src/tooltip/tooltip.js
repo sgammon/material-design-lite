@@ -138,12 +138,12 @@ material.MaterialTooltip.prototype.handleMouseEnter_ = function(event) {
 
   let delay = 200;
   if (this.element_.hasAttribute('data-tooltip-delay')) {
-    delay = parseInt(this.element_.getAttribute('data-tooltip-delay'));
+    delay = parseInt(this.element_.getAttribute('data-tooltip-delay'), 10);
   }
 
-  setTimeout(function() {
+  setTimeout((function() {
     this.element_.classList.add(MaterialTooltipCssClasses_.IS_ACTIVE);
-  }, delay);
+  }).bind(this), delay);
 };
 
 /**
