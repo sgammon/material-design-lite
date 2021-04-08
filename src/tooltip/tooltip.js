@@ -58,6 +58,15 @@ material.MaterialTooltip = function MaterialTooltip(element) {
    */
   this.element_ = element;
 
+  /**
+   * Whether the mouse is considered hovering over the target
+   * element.
+   *
+   * @private
+   * @type {!boolean}
+   */
+  this.hovering_ = false;
+
   const forElId = this.element_.getAttribute('for') ||
     this.element_.getAttribute('data-mdl-for');
 
@@ -106,6 +115,7 @@ material.MaterialTooltip.prototype.handleMouseEnter_ = function(event) {
   const top = props.top + (props.height / 2);
   const marginLeft = -1 * (this.element_.offsetWidth / 2);
   const marginTop = -1 * (this.element_.offsetHeight / 2);
+  this.hovering_ = true;
 
   if (this.element_.classList.contains(MaterialTooltipCssClasses_.LEFT) ||
       this.element_.classList.contains(MaterialTooltipCssClasses_.RIGHT)) {
@@ -142,7 +152,11 @@ material.MaterialTooltip.prototype.handleMouseEnter_ = function(event) {
   }
 
   setTimeout((function() {
-    this.element_.classList.add(MaterialTooltipCssClasses_.IS_ACTIVE);
+    if (this.hovering_ === true) {
+      window.requestAnimationFrame((function() {
+        this.element_.classList.add(MaterialTooltipCssClasses_.IS_ACTIVE);
+      }).bind(this));
+    }
   }).bind(this), delay);
 };
 
@@ -152,7 +166,10 @@ material.MaterialTooltip.prototype.handleMouseEnter_ = function(event) {
  * @private
  */
 material.MaterialTooltip.prototype.hideTooltip_ = function() {
-  this.element_.classList.remove(MaterialTooltipCssClasses_.IS_ACTIVE);
+  this.hovering_ = false;
+  window.requestAnimationFrame((function() {
+    this.element_.classList.remove(MaterialTooltipCssClasses_.IS_ACTIVE);
+  }).bind(this));
 };
 
 
