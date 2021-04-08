@@ -136,7 +136,14 @@ material.MaterialTooltip.prototype.handleMouseEnter_ = function(event) {
     this.element_.style.top = props.top + props.height + 10 + 'px';
   }
 
-  this.element_.classList.add(MaterialTooltipCssClasses_.IS_ACTIVE);
+  let delay = 200;
+  if (this.element_.hasAttribute('data-tooltip-delay')) {
+    delay = parseInt(this.element_.getAttribute('data-tooltip-delay'));
+  }
+
+  setTimeout(function() {
+    this.element_.classList.add(MaterialTooltipCssClasses_.IS_ACTIVE);
+  }, delay);
 };
 
 /**
